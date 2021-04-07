@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -23,7 +22,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once(dirname(__FILE__) . '/../../config.php');
-require_once($CFG->dirroot . '/blocks/game/libgame.php');
+require_once($CFG->dirroot . '/blocks/game/lib.php');
 require_once($CFG->libdir . '/grouplib.php');
 
 require_login();
@@ -52,12 +51,12 @@ $PAGE->set_heading(get_string('rank_game_title', 'block_game'));
 echo $OUTPUT->header();
 $cfggame = get_config('block_game');
 
-// now verify grading user has access to all groups or is member of the same group when separate groups used in course
+/* Now verify grading user has access to all groups or is member of the same group when separate groups used in course */
 $ok = false;
-if ($course->groupmode == 1 and !has_capability('moodle/site:accessallgroups', $context)) {
+if ($course->groupmode == 1 and ! has_capability('moodle/site:accessallgroups', $context)) {
     if (groups_is_member($groupid, $USER->id)) {
         $ok = true;
-    } 
+    }
 } else {
     $ok = true;
 }
@@ -67,7 +66,7 @@ if ($ok) {
         $game->config = $cfggame;
     }
     $limit = 0;
-    if ($game->config->show_rank == 1) {
+    if (isset($game->config->show_rank) && $game->config->show_rank == 1) {
         $outputhtml = '<div class="rank">';
         if ($courseid != 1) {
             $limit = $game->config->limit_rank;
@@ -100,8 +99,8 @@ if ($ok) {
                 $ordtxt = '<strong>' . $ord . '&ordm;</trong>';
             }
             $outputhtml .= '<tr>';
-            $outputhtml .= '<td>';
-            $outputhtml .= $ordtxt . '<hr/></td><td> ' . $usertxt . ' <hr/></td><td> ' . $scoretxt . '<hr/></td>';
+            $outputhtml .= '<td>' . $ordtxt . '<hr/></td><td> ' . $usertxt . ' <hr/></td>';
+            $outputhtml .= '<td> ' . $scoretxt . '<hr/></td>';
             $outputhtml .= '</tr>';
 
             if ($limit > 0 && $limit == $ord) {
@@ -120,6 +119,12 @@ if ($ok) {
             }
         }
         $outputhtml .= '</div>';
+    } else {
+        $outputhtml = "... <br/><br/>";
+        $context = context_course::instance($courseid, MUST_EXIST);
+        if (has_capability('moodle/course:update', $context, $USER->id)) {
+            $outputhtml .= get_string('not_initial_config_game', 'block_game');
+        }
     }
 }
 echo $outputhtml;

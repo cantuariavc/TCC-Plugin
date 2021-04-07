@@ -29,6 +29,7 @@ $string['block_game:addinstance'] = 'Add a new Game block';
 $string['block_game:myaddinstance'] = 'Add a new Game block to the My Moodle page';
 
 $string['defaultdisplaysettings'] = 'Game pack general settings';
+$string['not_initial_config_game'] = '<p>It is necessary to make the initial settings of the Game Block in the course.</p>';
 
 $string['config_avatar'] = 'Use Avatar';
 $string['config_avatar_help'] = '<p>Using Avatar.</p>';
@@ -36,6 +37,12 @@ $string['config_identity'] = 'Preserve user identity';
 $string['config_identity_help'] = '<p>Preserve user identity in sorting list.</p>';
 $string['config_rank_group'] = 'Show Group Rank';
 $string['config_rank_group_help'] = '<p>Showing the Group Ranking.</p>';
+
+$string['config_rank_group_calc'] = 'Calculation for group points';
+$string['config_rank_group_calc_help'] = '<p>Select the calculation method for group points.</p>';
+$string['sum'] = 'Sum';
+$string['med'] = 'Average';
+
 $string['config_rank'] = 'Show Rank';
 $string['config_rank_help'] = '<p>Showing the Ranking.</p>';
 $string['config_limit_rank'] = 'Ranking list limit (0 to unlimited)';
@@ -113,6 +120,13 @@ $string['perfil_gamer_title'] = 'Player information';
 $string['set_avatar_title'] = 'Select your Avatar';
 $string['rank_group_game_title'] = 'Groups ranking list';
 $string['rank_game_title'] = 'Ranking list';
+$string['order'] = 'Ordem';
+$string['name'] = 'Nome';
+$string['score_atv'] = 'Atividades';
+$string['score_section'] = 'Seções';
+$string['score_bonus_day'] = 'Bônus do dia';
+$string['score_total'] = 'Total';
+
 $string['help_game_title'] = 'Help of game';
 $string['not_start_game'] = 'User did not start playing';
 $string['not_start_game_s'] = 'Users they did not start playing';
@@ -133,9 +147,17 @@ $string['yes'] = 'Yes';
 $string['no'] = 'No';
 $string['ok'] = 'Ok';
 
+$string['section'] = 'Section Completion Points';
+$string['title_config_section'] = '<legend>Score section completion (completion criteria required):</legend>';
+$string['config_section'] = 'Configure section completion points.';
+$string['config_section_help'] = 'Configure section completion points.';
+
+$string['config_module'] = 'Configure points for module completion.';
+$string['config_module_help'] = 'Configure points for module completion.';
+
 $string['reset_points_btn'] = 'Reset ponits';
 $string['reset_points_title'] = 'Reset course points';
-$string['label_cornfirm_reset_points'] = 'When resetting the course points, all users lost their points. <br/> Do you really want to do this? <br/> <br/> <span class="text-muted">Note: This action does not exclude points acquired through activity notes, to do this you must reset the activity notes.</span>';
+$string['label_confirm_reset_points'] = 'When resetting the course points, all users lost their points. <br/> Do you really want to do this? <br/> <br/>';
 $string['reset_points_sucess'] = 'Course points reset for all users successfully !!';
 $string['reset_points_error'] = 'Error when resetting course points!';
 $string['reset_points_not_permission'] = 'You are not allowed to do this!';
@@ -145,7 +167,11 @@ $string['reset_points_not_permission'] = 'You are not allowed to do this!';
 $string['help_avatar_titulo'] = 'About avatar';
 $string['help_avatar_text'] = 'The game allows you to choose or change your avatar whenever you want. When The dotted icon appears means you have not yet chosen your avatar by clicking on it, or on your avatar, it takes you to the Avatar Selection page, just click on the desired avatar to make your choice.<br/>
 <br/><strong>Avatar tips :</strong><br/>
-- You can only change your avatar on the home page, off course! <br/>
+- You can only change your avatar on the homepage or the dashboard page! <br/>
+- The Gray-tone avatar will only be available when you reach the required level!<br/>';
+$string['help_avatar_text_course'] = 'The game allows you to choose or change your avatar whenever you want. When The dotted icon appears means you have not yet chosen your avatar by clicking on it, or on your avatar, it takes you to the Avatar Selection page, just click on the desired avatar to make your choice.<br/>
+<br/><strong>Avatar tips :</strong><br/>
+- You can change your avatar on the main page of the course! <br/>
 - The Gray-tone avatar will only be available when you reach the required level!<br/>';
 $string['help_info_user_titulo'] = 'Player Information';
 $string['help_info_user_text'] = 'By clicking on the player information icon you can see what your situation (Rating, Score and Level) in each course that is registered, that uses the Block Game plugin! You can still know your situation in the ambinte as a whole (General). And at the end it shows when badges the player has already won!';
@@ -153,6 +179,7 @@ $string['help_score_titulo'] = 'About points';
 $string['help_score_text'] = 'The game has a scoring system because the score of the player will define their rank and the level that is. So it is very important that you know how to earn points to improve your placement and your level.<br/>
 <br/><strong>How to get points:</strong><br/>';
 $string['help_score_activities_text'] = '<strong>Activity Points</strong> - when doing the proposed activities in the courses that are enrolled, the grade achieved will be converted into points of the game! So get the best grades in the activities to earn more points!<br/>';
+$string['help_score_sections_text'] = '<strong>Scoring for section completion</strong> - When you have completed all the activities provided for in a section, you will be able to receive a score! See how many points you can earn in each section:<br/>';
 $string['help_bonus_day_text'] = '<strong>Bonus of the day</strong> - Just to access the environment or your course you will receive, once a day, a bonus that will be added to your score!<br/>';
 $string['help_bonus_day_text_value'] = 'Current Bonus Value of the Day: ';
 $string['help_bonus_badge_text'] = '<strong>Bonus per badge</strong> - Upon completing a course you will receive a reward badge, this badge adds a great bonus that will add up to your score!<br/>';
