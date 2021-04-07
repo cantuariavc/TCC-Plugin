@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once(dirname(__FILE__) . '/../../config.php');
-require_once($CFG->dirroot . '/blocks/game/libgame.php');
+require_once($CFG->dirroot . '/blocks/game/lib.php');
 require_once($CFG->libdir . '/completionlib.php');
 
 require_login();
@@ -69,7 +69,7 @@ function get_rank_row($showrank, $CFG, $game_user) {
         return '
             <div class="boxgame">
                 <img src="'.$CFG->wwwroot.'/blocks/game/pix/big_rank.png" align="center" hspace="12"/>
-                <strong>' . get_string('label_rank', 'block_game') . ': ' . $game_user->rank . '&ordm; / ' . get_players($game_user->courseid) . '</strong>
+                <strong>' . get_string('label_rank', 'block_game') . ': ' . $game_user->ranking . '&ordm; / ' . get_players($game_user->courseid) . '</strong>
             </div>';
     } else {
         return '';
@@ -82,7 +82,8 @@ function get_score_row($showscore, $CFG, $game_user, $fullpoints) {
             return '
                 <div class="boxgame">
                     <img src="'.$CFG->wwwroot.'/blocks/game/pix/big_score.png" align="center" hspace="12"/>
-                    <strong>' . get_string('label_score', 'block_game') . ': ' . ($game_user->score + $game_user->score_activities) . '</strong>
+                    <strong>' . get_string('label_score', 'block_game') . ': ' . ($game_user->score + $game_user->score_bonus_day +
+                    $game_user->score_activities + $game_user->score_section) . '</strong>
                 </div>';
         } else {
             return '
@@ -186,7 +187,10 @@ if ($couseid > 1) {
                 get_rank_row($showrank, $CFG, $game) .'
             </div>
             
-            <div class="tab-pane fade" id="'.$bichinho_virtual.'" role="tabpanel" aria-labelledby="'.$bichinho_virtual.'-tab"><br/>&emsp;Bichinho Virtual</div>
+            <div class="tab-pane fade" id="'.$bichinho_virtual.'" role="tabpanel" aria-labelledby="'.$bichinho_virtual.'-tab">
+                <br/>
+                &emsp;Bichinho Virtual
+            </div>
             
             <div class="tab-pane fade" id="'.$quests.'" role="tabpanel" aria-labelledby="'.$quests.'-tab"><br/>&emsp;Quests</div>
 
@@ -210,7 +214,8 @@ if ($couseid > 1) {
     $rs = get_games_user($USER->id);
 
     foreach ($rs as $gameuser) {
-        $fullpoints = ($fullpoints + ($gameuser->score + $gameuser->score_activities + $gameuser->score_badges));
+        $fullpoints = ($fullpoints + ($gameuser->score + $gameuser->score_bonus_day + $gameuser->score_activities + $gameuser->score_badges + 
+            $gameuser->score_section));
         $course = $DB->get_record('course', array('id' => $gameuser->courseid));
 
         $outputhtml .= '<h3>';
