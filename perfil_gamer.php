@@ -49,115 +49,196 @@ $PAGE->set_context(context_course::instance($couseid));
 $PAGE->set_title(get_string('perfil_gamer_title', 'block_game'));
 $PAGE->set_heading(get_string('perfil_gamer_title', 'block_game'));
 
-echo $OUTPUT->header();
-$outputhtml = '<div class="boxs">';
 
-if ($couseid == 1) {
+function get_avatar_row($showavatar, $CFG, $game, $OUTPUT, $USER) {
+    $avatar_row = '<div class="boxgame">';
     if ($showavatar == 1) {
-        $outputhtml .= '<div class="boxgame">';
-        $outputhtml .= '<img  align="center" hspace="12" src="';
-        $outputhtml .= $CFG->wwwroot . '/blocks/game/pix/a' . $game->avatar . '.png" title="avatar"/>';
+        $avatar_row .= '<img align="center" hspace="12" src="'.$CFG->wwwroot.'/blocks/game/pix/a'.$game->avatar.'.png" title="avatar"/>';
     } else {
-        $outputhtml .= '<div class="boxgame">' . $OUTPUT->user_picture($USER, array('size' => 80, 'hspace' => 12));
+        $avatar_row .= $OUTPUT->user_picture($USER, array('size' => 80, 'hspace' => 12));
     }
-    $outputhtml .= '  <strong>' . $USER->firstname .' '. $USER->lastname . '</strong></div>';
-    $outputhtml .= '<hr/>';
-    $rs = get_games_user($USER->id);
-    $fullpoints = 0;
-    foreach ($rs as $gameuser) {
-        $fullpoints = ($fullpoints + ($gameuser->score + $gameuser->score_bonus_day +
-                $gameuser->score_activities + $gameuser->score_badges + $gameuser->score_section));
 
-        $course = $DB->get_record('course', array('id' => $gameuser->courseid));
-        if ($gameuser->courseid != 1) {
-            $outputhtml .= '<h3>( ' . $course->fullname . ' )</h3><br/>';
+    $avatar_row .= '
+            <strong>' . $USER->firstname . ' ' . $USER->lastname . '</strong>
+        </div>';
+    return $avatar_row;
+}
+
+function get_rank_row($showrank, $CFG, $game_user) {
+    if ($showrank == 1) {
+        return '
+            <div class="boxgame">
+                <img src="'.$CFG->wwwroot.'/blocks/game/pix/big_rank.png" align="center" hspace="12"/>
+                <strong>' . get_string('label_rank', 'block_game') . ': ' . $game_user->ranking . '&ordm; / ' . get_players($game_user->courseid) . '</strong>
+            </div>';
+    } else {
+        return '';
+    }
+}
+
+function get_score_row($showscore, $CFG, $game_user, $fullpoints) {
+    if ($showscore == 1) {
+        if ($game_user->courseid != 1) {
+            return '
+                <div class="boxgame">
+                    <img src="'.$CFG->wwwroot.'/blocks/game/pix/big_score.png" align="center" hspace="12"/>
+                    <strong>' . get_string('label_score', 'block_game') . ': ' . ($game_user->score + $game_user->score_bonus_day +
+                    $game_user->score_activities + $game_user->score_section) . '</strong>
+                </div>';
         } else {
-            $outputhtml .= '<h3>( ' . get_string('general', 'block_game') . ' )</h3><br/>';
+            return '
+                <div class="boxgame">
+                    <img src="'.$CFG->wwwroot.'/blocks/game/pix/big_score.png" align="center" hspace="12"/>
+                    <strong>' . get_string('label_score', 'block_game') . ': ' . $fullpoints . '</strong>
+                </div>';
         }
-        $outputhtml .= '<div class="boxgame">';
-        if ($showrank == 1) {
-            $outputhtml .= '<div class="boxgame"><img src="';
-            $outputhtml .= $CFG->wwwroot . '/blocks/game/pix/big_rank.png" align="center" hspace="12"/>';
-            $outputhtml .= '<strong>' . get_string('label_rank', 'block_game');
-            $outputhtml .= ': ' . $gameuser->ranking . '&ordm; / ' . get_players($gameuser->courseid) . '</strong></div>';
-        }
-        if ($showscore == 1) {
-            if ($gameuser->courseid != 1) {
-                $outputhtml .= '<div class="boxgame">';
-                $outputhtml .= '<img src="' . $CFG->wwwroot . '/blocks/game/pix/big_score.png" align="center" hspace="12"/>';
-                $outputhtml .= '<strong>' . get_string('label_score', 'block_game');
-                $outputhtml .= ': ' . ($gameuser->score + $gameuser->score_bonus_day +
-                $gameuser->score_activities + $gameuser->score_section) . '</strong></div>';
-            } else {
-                $outputhtml .= '<div class="boxgame">';
-                $outputhtml .= '<img src="' . $CFG->wwwroot . '/blocks/game/pix/big_score.png" align="center" hspace="12"/>';
-                $outputhtml .= '<strong>' . get_string('label_score', 'block_game') . ': ' . $fullpoints . '</strong></div>';
-            }
-        }
-        if ($showlevel == 1) {
-            $outputhtml .= '<div class="boxgame">';
-            $outputhtml .= '<img src="' . $CFG->wwwroot . '/blocks/game/pix/big_level.png" align="center" hspace="12"/>';
-            $outputhtml .= '<strong>' . get_string('label_level', 'block_game') . ': ' . $gameuser->level . '</strong><div>';
-        }
-        $outputhtml .= '<hr/>';
+    } else {
+        return '';
     }
+}
 
-    $outputhtml .= '<h4>' . get_string('label_badge', 'block_game') . '</h4><br/>';
+function get_level_row($showlevel, $CFG, $game_user) {
+    if ($showlevel == 1) {
+        return '
+            <div class="boxgame">
+                <img src="'.$CFG->wwwroot.'/blocks/game/pix/big_level.png" align="center" hspace="12"/>
+                <strong>' . get_string('label_level', 'block_game') . ': ' . $game_user->level . '</strong>
+            </div>';
+    } else {
+        return '';
+    }
+}
+
+function get_badges($game, $DB, $CFG) {
+    $badges_row = '';
     if ($game->badges != "") {
         $badges = explode(",", $game->badges);
         foreach ($badges as $badge) {
             $coursebadge = $DB->get_record('course', array('id' => $badge));
-            $outputhtml .= '<img src="' . $CFG->wwwroot . '/blocks/game/pix/big_badge.png" align="center" hspace="12"/>';
-            $outputhtml .= '<strong>' . $coursebadge->fullname . '</strong> ';
+            $badges_row .= '
+                <img src="'.$CFG->wwwroot.'/blocks/game/pix/big_badge.png" align="center" hspace="12"/>
+                <strong>' . $coursebadge->fullname . '</strong> ';
         }
+    } else {
+        $badges_row .= '&emsp;O usuário não possui emblemas.';
     }
-    $outputhtml .= '<hr/>';
-} else {
-    $outputhtml .= '<table border="0">';
-    $outputhtml .= '<tr>';
-    $outputhtml .= '<td>';
+    return $badges_row;
+}
 
-    $outputhtml .= '<h3>( ' . $course->fullname . ' )</h3><br/>';
+echo $OUTPUT->header();
+
+$fullpoints = 0;
+
+$outputhtml = '<div class="boxs">';
+
+if ($couseid > 1) {
+    $perfil = 'perfil';
+    $emblemas = 'emblemas';
+    $ranking = 'ranking';
+    $bichinho_virtual = 'bichinho-virtual';
+    $quests = 'quests';
+    $calendario = 'calendario';
+    $loja = 'loja';
+
+    $outputhtml = '
+        <h3>'.$course->fullname.'</h3><br/>
+
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="'.$perfil.'-tab" data-toggle="tab" href="#'.$perfil.'" role="tab" aria-controls="'.$perfil.'" aria-selected="true">'.ucfirst($perfil).'</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="'.$emblemas.'-tab" data-toggle="tab" href="#'.$emblemas.'" role="tab" aria-controls="'.$emblemas.'" aria-selected="false">'.ucfirst($emblemas).'</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="'.$ranking.'-tab" data-toggle="tab" href="#'.$ranking.'" role="tab" aria-controls="'.$ranking.'" aria-selected="false">'.ucfirst($ranking).'</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="'.$bichinho_virtual.'-tab" data-toggle="tab" href="#'.$bichinho_virtual.'" role="tab" aria-controls="'.$bichinho_virtual.'" aria-selected="false">'.ucwords(str_replace('-', ' ', $bichinho_virtual)).'</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="'.$quests.'-tab" data-toggle="tab" href="#'.$quests.'" role="tab" aria-controls="'.$quests.'" aria-selected="false">'.ucfirst($quests).'</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="'.$calendario.'-tab" data-toggle="tab" href="#'.$calendario.'" role="tab" aria-controls="'.$calendario.'" aria-selected="false">'.ucfirst(substr_replace($calendario, 'ário', 6)).'</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="'.$loja.'-tab" data-toggle="tab" href="#'.$loja.'" role="tab" aria-controls="'.$loja.'" aria-selected="false">'.ucfirst($loja).'</a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="'.$perfil.'" role="tabpanel" aria-labelledby="'.$perfil.'-tab">
+                <br/>' .
+                get_avatar_row($showavatar, $CFG, $game, $OUTPUT, $USER) . '
+                <br/>' .
+                get_score_row($showscore, $CFG, $game, $fullpoints) . '
+                <br/>' .
+                get_level_row($showlevel, $CFG, $game) . '
+            </div>
+
+            <div class="tab-pane fade" id="'.$emblemas.'" role="tabpanel" aria-labelledby="'.$emblemas.'-tab">' . '
+                <br/>'.
+                get_badges($game, $DB, $CFG).'
+            </div>
+            
+            <div class="tab-pane fade" id="'.$ranking.'" role="tabpanel" aria-labelledby="'.$ranking.'-tab">' . '
+                <br/>'.
+                get_rank_row($showrank, $CFG, $game) .'
+            </div>
+            
+            <div class="tab-pane fade" id="'.$bichinho_virtual.'" role="tabpanel" aria-labelledby="'.$bichinho_virtual.'-tab">
+                <br/>
+                &emsp;Bichinho Virtual
+            </div>
+            
+            <div class="tab-pane fade" id="'.$quests.'" role="tabpanel" aria-labelledby="'.$quests.'-tab"><br/>&emsp;Quests</div>
+
+            <div class="tab-pane fade" id="'.$calendario.'" role="tabpanel" aria-labelledby="'.$calendario.'-tab"><br/>&emsp;Calendário</div>    
+        
+            <div class="tab-pane fade" id="'.$loja.'" role="tabpanel" aria-labelledby="'.$loja.'-tab"><br/>&emsp;Loja</div>
+        </div>';
+} elseif ($couseid == 1) {
+    $outputhtml .= '<div class="boxgame">';
+
     if ($showavatar == 1) {
-        $outputhtml .= '<img  align="center" hspace="12" ';
-        $outputhtml .= 'src="' . $CFG->wwwroot . '/blocks/game/pix/a' . $game->avatar . '.png" title="avatar"/>';
+        $outputhtml .= '<img  align="center" hspace="12" src="'.$CFG->wwwroot.'/blocks/game/pix/a'.$game->avatar.'.png" title="avatar"/>';
     } else {
         $outputhtml .= $OUTPUT->user_picture($USER, array('size' => 80, 'hspace' => 12));
     }
-    $outputhtml .= '  <strong>' . $USER->firstname .' '. $USER->lastname . '</strong><br/>';
-    if ($showrank == 1) {
-        $outputhtml .= '<br/>';
-        $outputhtml .= '<img src="' . $CFG->wwwroot . '/blocks/game/pix/big_rank.png" align="center" hspace="12"/>';
-        $outputhtml .= '<strong>' . get_string('label_rank', 'block_game');
-        $outputhtml .= ': ' . $game->ranking . '&ordm; / ' . get_players($game->courseid) . '</strong><br/>';
-    }
-    if ($showscore == 1) {
-        $outputhtml .= '<br/>';
-        $outputhtml .= '<img src="' . $CFG->wwwroot . '/blocks/game/pix/big_score.png" align="center" hspace="12"/>';
-        $outputhtml .= '<strong>' . get_string('label_score', 'block_game') . ': ';
-        $outputhtml .= ($game->score + $game->score_bonus_day + $game->score_activities +
-                        $game->score_badges + $game->score_section) . '</strong><br/>';
-    }
-    if ($showlevel == 1) {
-        $outputhtml .= '<br/>';
-        $outputhtml .= '<img src="' . $CFG->wwwroot . '/blocks/game/pix/big_level.png" align="center" hspace="12"/>';
-        $outputhtml .= '<strong>' . get_string('label_level', 'block_game') . ': ' . $game->level . '</strong><br/>';
-    }
-    $outputhtml .= '</td>';
-    $outputhtml .= '</tr>';
-    $outputhtml .= '</table>';
-    $outputhtml .= '<hr/>';
-    $outputhtml .= '<h4>' . get_string('label_badge', 'block_game') . '</h4><br/>';
-    if ($game->badges != "") {
-        $badges = explode(",", $game->badges);
-        foreach ($badges as $badge) {
-            $coursebadge = $DB->get_record('course', array('id' => $badge));
-            $outputhtml .= '<img src="' . $CFG->wwwroot . '/blocks/game/pix/big_badge.png" align="center" hspace="12"/>';
-            $outputhtml .= '<strong>' . $coursebadge->fullname . '</strong> ';
+
+    $outputhtml .= '
+            <strong>'.$USER->firstname.' '.$USER->lastname.'</strong>
+        </div>
+        <hr/>';
+    $rs = get_games_user($USER->id);
+
+    foreach ($rs as $gameuser) {
+        $fullpoints = ($fullpoints + ($gameuser->score + $gameuser->score_bonus_day + $gameuser->score_activities + $gameuser->score_badges + 
+            $gameuser->score_section));
+        $course = $DB->get_record('course', array('id' => $gameuser->courseid));
+
+        $outputhtml .= '<h3>';
+        if ($gameuser->courseid != 1) {
+            $outputhtml .= $course->fullname;
+        } else {
+            $outputhtml .= get_string('general', 'block_game');
         }
+        $outputhtml .= '
+            </h3><br/>
+            <div class="boxgame">' .
+                get_rank_row($showrank, $CFG, $gameuser) . '
+                <br/>' .
+                get_score_row($showscore, $CFG, $gameuser, $fullpoints) . '
+                <br/>' .
+                get_level_row($showlevel, $CFG, $game_user) . '
+            </div>
+            <hr/>
+            &emsp;<h3>Emblemas</h3>' .
+            get_badges($game, $DB, $CFG);
     }
-    $outputhtml .= '<hr/>';
 }
 $outputhtml .= '</div>';
+
 echo $outputhtml;
 echo $OUTPUT->footer();
