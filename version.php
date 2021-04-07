@@ -25,8 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version  = 2020042965;
-$plugin->requires = 2015051100;
+$plugin->version  = 2021033024;
+$plugin->requires = 2017111300;
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release  = 'Version for Moodle 3.2 onwards';
+$plugin->release  = 'Version for Moodle 3.4 onwards';
 $plugin->component = 'block_game';

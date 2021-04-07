@@ -29,6 +29,7 @@ $string['block_game:addinstance'] = 'Adcionar novo bloco Game';
 $string['block_game:myaddinstance'] = 'Adcionar novo bloco Game na sua Moodle page';
 
 $string['defaultdisplaysettings'] = 'Configurações gerais do bloco Game';
+$string['not_initial_config_game'] = 'É necessário realizar as configurações iniciais do Bloco Game no curso.';
 
 $string['config_avatar'] = 'Utilizar Avatar';
 $string['config_avatar_help'] = '<p>Utilizando Avatar.</p>';
@@ -36,6 +37,12 @@ $string['config_identity'] = 'Preservar identidade do usuário';
 $string['config_identity_help'] = '<p>Preservar identidade do usuário na lista de classificação.</p>';
 $string['config_rank_group'] = 'Mostrar Classificação de Grupos';
 $string['config_rank_group_help'] = '<p>Mostrando Classificação de Grupos.</p>';
+
+$string['config_rank_group_calc'] = 'Cálculo para pontos em grupo';
+$string['config_rank_group_calc_help'] = '<p>Selecione a forma de cálculo para pontos em grupo.</p>';
+$string['sum'] = 'Soma';
+$string['med'] = 'Média';
+
 $string['config_rank'] = 'Mostrar Classificação';
 $string['config_rank_help'] = '<p>Mostrando Classificação.</p>';
 $string['config_limit_rank'] = 'Limite da lista de classificação (0 para ilimitado)';
@@ -113,9 +120,18 @@ $string['perfil_gamer_title'] = 'Informações do jogador';
 $string['set_avatar_title'] = 'Selecione seu Avatar';
 $string['rank_group_game_title'] = 'Lista de classificação de Grupos';
 $string['rank_game_title'] = 'Lista de classificação';
+$string['order'] = 'Ordem';
+$string['name'] = 'Nome';
+$string['score_atv'] = 'Atividades';
+$string['score_section'] = 'Seções';
+$string['score_bonus_day'] = 'Bônus do dia';
+$string['score_total'] = 'Total';
+
 $string['help_game_title'] = 'Ajuda do jogo';
 $string['not_start_game'] = 'Usuário não começou a jogar';
 $string['not_start_game_s'] = 'Usuários não começaram a jogar';
+
+
 
 $string['label_course'] = 'Curso';
 $string['label_badge'] = 'Emblemas';
@@ -133,9 +149,18 @@ $string['yes'] = 'Sim';
 $string['no'] = 'Não';
 $string['ok'] = 'Ok';
 
+$string['section'] = 'Pontos para conclusão da Seção';
+$string['title_config_section'] = '<legend>Pontuar conclusão de seções (necessário critérios de conclusão):</legend>';
+$string['config_section'] = 'Configurar pontos para conclusão da seção.';
+$string['config_section_help'] = 'Configurar pontos para conclusão da seção.';
+
+$string['config_module'] = 'Configurar pontos para conclusão de módulo.';
+$string['config_module_help'] = 'Configurar pontos para conclusão de módulo.';
+
+
 $string['reset_points_btn'] = 'Resetar pontos';
 $string['reset_points_title'] = 'Resetar pontos do curso';
-$string['label_cornfirm_reset_points'] = 'Ao resetar os pontos do curso, todos os usuários perderam seus pontos.<br/> Deseja mesmo fazer isso?<br/><br/><span class="text-muted">Obs.: Essa ação não exclui pontos adquiridos por meio de notas de atividades, para fazer isso deverá resetar as notas das atividades.</span>';
+$string['label_confirm_reset_points'] = 'Ao resetar os pontos do curso, todos os usuários perderam seus pontos.<br/> Deseja mesmo fazer isso?<br/><br/>';
 $string['reset_points_sucess'] = 'Pontos do curso resetado para todos os usuários com sucesso!!';
 $string['reset_points_error'] = 'Erro ao resetar os pontos do curso!!';
 $string['reset_points_not_permission'] = 'Você não possui permissão para fazer essa ação!';
@@ -144,7 +169,11 @@ $string['reset_points_not_permission'] = 'Você não possui permissão para faze
 $string['help_avatar_titulo'] = 'Sobre o avatar';
 $string['help_avatar_text'] = 'O jogo permite que você escolha ou mude seu avatar a hora que desejar. Quando aparece o ícone pontilhado significa que você ainda não escolheu seu, clicando no mesmo, ou no seu avatar, ele te leva para a página de seleção, basta clicar no avatar desejado para fazer sua escolha.<br/>
 <br/><strong>Dicas sobre avatar:</strong><br/>
-- Você só poderá trocar de avatar na página inicial, fora do curso! <br/>
+- Você só poderá trocar de avatar na página inicial ou na página de painel! <br/>
+- O avatar em tom de cinza só estará disponível quando você atingir o nível necessário!<br/>';
+$string['help_avatar_text_course'] = 'O jogo permite que você escolha ou mude seu avatar a hora que desejar. Quando aparece o ícone pontilhado significa que você ainda não escolheu seu, clicando no mesmo, ou no seu avatar, ele te leva para a página de seleção, basta clicar no avatar desejado para fazer sua escolha.<br/>
+<br/><strong>Dicas sobre avatar:</strong><br/>
+- Você poderá trocar de avatar na página principal do curso! <br/>
 - O avatar em tom de cinza só estará disponível quando você atingir o nível necessário!<br/>';
 $string['help_info_user_titulo'] = 'Informações do jogador';
 $string['help_info_user_text'] = 'Clicando no ícone de informações do jogador você poderá ver qual a sua situação (Classificação, Pontuação e Nível) em cada curso que está matriculado, que utiliza o plugin de Bloco Game! Ainda poderá saber sua situação no ambiente como um todo (Geral). E ao final mostra quando emblemas o jogador já conquistou!<br/>';
@@ -152,6 +181,7 @@ $string['help_score_titulo'] = 'Sobre pontuação';
 $string['help_score_text'] = 'O jogo possui sistema de pontuação pois a pontuação do jogador definirá a sua classificação e o nível que se encontra. Por isso é muito importando você saber como ganhar pontos para melhorar sua colocação e seu nível.<br/>
 <br/><strong>Como conseguir pontos:</strong><br/>';
 $string['help_score_activities_text'] = '<strong>Pontos de atividades</strong> - ao fazer as atividades propostas nos cursos que está matriculado, a nota alcançada será convertida em pontos do jogo! Portanto alcance as melhores notas nas atividades para ganhas mais pontos!<br/>';
+$string['help_score_sections_text'] = '<strong>Pontuação por conclusão de seção</strong> - Ao concluir todas as atividades previstas em uma seção, você poderá receber uma pontuação! Veja quantos pontos você pode ganhar em cada seção:<br/>';
 $string['help_bonus_day_text'] = '<strong>Bônus do dia</strong> - Só de acessar o ambiente ou o seu curso você receberá, uma única vez por dia, um bônus que será somado a sua pontuação! Para garantir seu bônus, acesse seu curso pelo menos uma vez por dia!<br/>';
 $string['help_bonus_day_text_value'] = 'Valor atual do bônus do dia: ';
 $string['help_bonus_badge_text'] = '<strong>Bônus por emblema</strong> - A conclusão de um curso é uma vitória que você alcança, portanto ao concluir um curso você receberá um emblema como recompensa, esse emblema agrega um bônus de grande valor que será somado a sua pontuação!<br/>';

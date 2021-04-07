@@ -23,7 +23,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 require_once(dirname(__FILE__) . '/../../config.php');
-require_once($CFG->dirroot . '/blocks/game/libgame.php');
+require_once($CFG->dirroot . '/blocks/game/lib.php');
 require_once($CFG->libdir . '/completionlib.php');
 
 require_login();
@@ -65,7 +65,9 @@ if ($couseid == 1) {
     $rs = get_games_user($USER->id);
     $fullpoints = 0;
     foreach ($rs as $gameuser) {
-        $fullpoints = ($fullpoints + ($gameuser->score + $gameuser->score_activities + $gameuser->score_badges));
+        $fullpoints = ($fullpoints + ($gameuser->score + $gameuser->score_bonus_day +
+                $gameuser->score_activities + $gameuser->score_badges + $gameuser->score_section));
+
         $course = $DB->get_record('course', array('id' => $gameuser->courseid));
         if ($gameuser->courseid != 1) {
             $outputhtml .= '<h3>( ' . $course->fullname . ' )</h3><br/>';
@@ -77,14 +79,15 @@ if ($couseid == 1) {
             $outputhtml .= '<div class="boxgame"><img src="';
             $outputhtml .= $CFG->wwwroot . '/blocks/game/pix/big_rank.png" align="center" hspace="12"/>';
             $outputhtml .= '<strong>' . get_string('label_rank', 'block_game');
-            $outputhtml .= ': ' . $gameuser->rank . '&ordm; / ' . get_players($gameuser->courseid) . '</strong></div>';
+            $outputhtml .= ': ' . $gameuser->ranking . '&ordm; / ' . get_players($gameuser->courseid) . '</strong></div>';
         }
         if ($showscore == 1) {
             if ($gameuser->courseid != 1) {
                 $outputhtml .= '<div class="boxgame">';
                 $outputhtml .= '<img src="' . $CFG->wwwroot . '/blocks/game/pix/big_score.png" align="center" hspace="12"/>';
                 $outputhtml .= '<strong>' . get_string('label_score', 'block_game');
-                $outputhtml .= ': ' . ($gameuser->score + $gameuser->score_activities) . '</strong></div>';
+                $outputhtml .= ': ' . ($gameuser->score + $gameuser->score_bonus_day +
+                $gameuser->score_activities + $gameuser->score_section) . '</strong></div>';
             } else {
                 $outputhtml .= '<div class="boxgame">';
                 $outputhtml .= '<img src="' . $CFG->wwwroot . '/blocks/game/pix/big_score.png" align="center" hspace="12"/>';
@@ -126,13 +129,14 @@ if ($couseid == 1) {
         $outputhtml .= '<br/>';
         $outputhtml .= '<img src="' . $CFG->wwwroot . '/blocks/game/pix/big_rank.png" align="center" hspace="12"/>';
         $outputhtml .= '<strong>' . get_string('label_rank', 'block_game');
-        $outputhtml .= ': ' . $game->rank . '&ordm; / ' . get_players($game->courseid) . '</strong><br/>';
+        $outputhtml .= ': ' . $game->ranking . '&ordm; / ' . get_players($game->courseid) . '</strong><br/>';
     }
     if ($showscore == 1) {
         $outputhtml .= '<br/>';
         $outputhtml .= '<img src="' . $CFG->wwwroot . '/blocks/game/pix/big_score.png" align="center" hspace="12"/>';
         $outputhtml .= '<strong>' . get_string('label_score', 'block_game') . ': ';
-        $outputhtml .= ($game->score + $game->score_activities) . '</strong><br/>';
+        $outputhtml .= ($game->score + $game->score_bonus_day + $game->score_activities +
+                        $game->score_badges + $game->score_section) . '</strong><br/>';
     }
     if ($showlevel == 1) {
         $outputhtml .= '<br/>';
