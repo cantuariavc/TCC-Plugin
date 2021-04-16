@@ -186,6 +186,13 @@ class block_game extends block_base {
                 $game->score_section = $scoresections;
             }
         }
+
+        // Set daily login.
+        if (!empty($COURSE) && $COURSE->id > 1 && !empty($game) && !get_daily_login($COURSE->id, $game->id)) {
+            set_daily_login($COURSE->id, $game->id);
+        }
+
+
         // Bonus of day.
         if (isset($game->config->bonus_day)) {
             $addbonusday = $game->config->bonus_day;

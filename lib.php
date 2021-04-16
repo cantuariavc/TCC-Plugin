@@ -269,6 +269,31 @@ function reset_points_game($courseid) {
     return false;
 }
 
+
+function set_daily_login($courseid, $userid) {
+    global $DB, $CFG;
+    if (!empty($courseid) && !empty($userid)) {
+        $sql = "INSERT INTO {block_game_daily_login}(loginday, courseid, userid) VALUES (?, ?, ?)";
+        $DB->execute($sql, array(date('Y-m-d'), $courseid, $userid));
+  
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function get_daily_login($courseid, $userid) {
+    global $DB, $CFG;
+    if (!empty($courseid) && !empty($userid)) {
+        $sql = "SELECT * FROM {block_game_daily_login} WHERE loginday=? AND courseid=? AND userid=?";
+        $today = $DB->get_records_sql($sql, array(date('Y-m-d'), $courseid, $userid));
+        return $today;
+    } else {
+        return false;
+    }
+}
+
+
 /**
  * Return update bonus of day user
  *
