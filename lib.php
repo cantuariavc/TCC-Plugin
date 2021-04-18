@@ -282,12 +282,18 @@ function set_daily_login($courseid, $userid) {
     }
 }
 
-function get_daily_login($courseid, $userid) {
+function get_daily_login($courseid, $userid, $today=false, $month='0', $days='0') {
     global $DB, $CFG;
     if (!empty($courseid) && !empty($userid)) {
-        $sql = "SELECT * FROM {block_game_daily_login} WHERE loginday=? AND courseid=? AND userid=?";
-        $today = $DB->get_records_sql($sql, array(date('Y-m-d'), $courseid, $userid));
-        return $today;
+        if ($today) {
+            $sql = "SELECT * FROM {block_game_daily_login} WHERE loginday=? AND courseid=? AND userid=?";
+            $days = $DB->get_records_sql($sql, array(date('Y-m-d'), $courseid, $userid));
+        } else {
+            $sql = "SELECT * FROM {block_game_daily_login} WHERE loginday >= ? AND loginday <= ? AND courseid=? AND userid=? ORDER BY loginday ASC";
+            $days = $DB->get_records_sql($sql, array(date('Y-'.$month.'-01'), date('Y-'.$month.'-'.$days), $courseid, $userid));
+        }
+
+        return $days;
     } else {
         return false;
     }

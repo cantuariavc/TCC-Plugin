@@ -1,7 +1,5 @@
 <?php
 
-// require_once('calendar_css.php');
-// require_once('calendar.js');
 
 function get_calendar() {
     return mostrar_calendario_completo();
@@ -24,7 +22,10 @@ function mostrar_calendario_completo() {
 }
 
 function mostrar_calendario($mes) {
-	$numero_dias = get_numero_dias($mes);	// retorna o número de dias que tem o mês desejado
+    $numero_dias = get_numero_dias($mes);	// retorna o número de dias que tem o mês desejado
+    
+    $dias_logados = get_loged_dates($mes, $numero_dias);
+
 	$nome_mes = get_nome_mes($mes);
 	$diacorrente = 0;	
 	$diasemana = jddayofweek(cal_to_jd(CAL_GREGORIAN, $mes, "01", date('Y')), 0);	// função que descobre o dia da semana
@@ -66,9 +67,8 @@ function mostrar_calendario($mes) {
                     
                     // Adicionar visualização de dia
                     // $calendario .= '<a href = '.$_SERVER['PHP_SELF'].'?mes=$mes&dia='.($diacorrente+1).'>'.++$diacorrente.'</a>';
-                    if ($mes < date('m')) {
-                        $calendario .= '<a style="background-color:lightgreen">'.++$diacorrente.'</a>';
-                    } elseif ($mes == date('m') && $diacorrente < date('d')) {
+                    
+                    if (in_array($diacorrente + 1, $dias_logados)) {
                         $calendario .= '<a style="background-color:lightgreen">'.++$diacorrente.'</a>';
                     } else {
                         $calendario .= '<a>'.++$diacorrente.'</a>';
@@ -103,6 +103,26 @@ function get_numero_dias($mes) {
 	    $numero_dias['02'] = 29;	// altera o numero de dias de fevereiro se o ano for bissexto
  
 	return $numero_dias[$mes];
+}
+
+function get_loged_dates($mes, $numero_dias) {
+    global $SESSION;
+
+    $couseid = required_param('id', PARAM_INT);
+    
+    $user = $SESSION->game;
+    $userid = $user->id;
+
+    $dias_logados = array();
+
+    foreach (get_daily_login($couseid, $userid, false, $mes, $numero_dias) as $obj) {
+        $date = explode(' ', $obj->loginday)[0];
+        $day = explode('-', $date)[2];
+
+        array_push($dias_logados, $day);
+    }
+
+    return $dias_logados;
 }
 
 function get_nome_mes($mes) {
