@@ -269,6 +269,37 @@ function reset_points_game($courseid) {
     return false;
 }
 
+
+function set_daily_login($courseid, $userid) {
+    global $DB, $CFG;
+    if (!empty($courseid) && !empty($userid)) {
+        $sql = "INSERT INTO {block_game_daily_login}(loginday, courseid, userid) VALUES (?, ?, ?)";
+        $DB->execute($sql, array(date('Y-m-d'), $courseid, $userid));
+  
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function get_daily_login($courseid, $userid, $today=false, $month='0', $days='0') {
+    global $DB, $CFG;
+    if (!empty($courseid) && !empty($userid)) {
+        if ($today) {
+            $sql = "SELECT * FROM {block_game_daily_login} WHERE loginday=? AND courseid=? AND userid=?";
+            $days = $DB->get_records_sql($sql, array(date('Y-m-d'), $courseid, $userid));
+        } else {
+            $sql = "SELECT * FROM {block_game_daily_login} WHERE loginday >= ? AND loginday <= ? AND courseid=? AND userid=? ORDER BY loginday ASC";
+            $days = $DB->get_records_sql($sql, array(date('Y-'.$month.'-01'), date('Y-'.$month.'-'.$days), $courseid, $userid));
+        }
+
+        return $days;
+    } else {
+        return false;
+    }
+}
+
+
 /**
  * Return update bonus of day user
  *
