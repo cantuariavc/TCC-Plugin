@@ -299,6 +299,36 @@ function get_daily_login($courseid, $userid, $today=false, $month='0', $days='0'
     }
 }
 
+function get_course_registration_day($couseid, $userid) {
+    global $DB, $CFG;
+    if (!empty($couseid) && !empty($userid)) {
+        $sql = "SELECT ue.timestart
+                FROM {enrol} e
+                INNER JOIN {user_enrolments} ue
+                on e.id = ue.enrolid
+                WHERE e.courseid=? AND ue.userid=?";
+        $first_day = $DB->get_records_sql($sql, array($couseid, $userid));
+        
+        return $first_day;
+    } else {
+        return false;
+    }
+}
+
+function get_number_days_logged($first_day, $courseid, $userid) {
+    global $DB, $CFG;
+    if (!empty($first_day) && !empty($courseid) && !empty($userid)) {
+        $sql = "SELECT COUNT(loginday)
+                FROM {block_game_daily_login}
+                WHERE loginday >= ? AND courseid=? AND userid=?";
+        $days_logged = $DB->get_records_sql($sql, array($first_day, $courseid, $userid));
+        
+        return $days_logged;
+    } else {
+        return false;
+    }
+    
+}
 
 /**
  * Return update bonus of day user
