@@ -108,12 +108,12 @@ function get_numero_dias($mes) {
 function get_loged_dates($mes, $numero_dias) {
     global $USER;
 
-    $couseid = required_param('id', PARAM_INT);
+    $courseid = required_param('id', PARAM_INT);
     $userid = $USER->id;
 
     $dias_logados = array();
 
-    foreach (get_daily_login($couseid, $userid, false, $mes, $numero_dias) as $obj) {
+    foreach (get_daily_login($courseid, $userid, false, $mes, $numero_dias) as $obj) {
         $date = explode(' ', $obj->loginday)[0];
         $day = explode('-', $date)[2];
 
