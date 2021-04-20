@@ -188,8 +188,8 @@ class block_game extends block_base {
         }
 
         // Set daily login.
-        if (!empty($COURSE) && $COURSE->id > 1 && !empty($game) && !get_daily_login($COURSE->id, $game->id, true)) {
-            set_daily_login($COURSE->id, $game->id);
+        if (!empty($game) && $game->courseid > 1 && !get_daily_login($game->courseid, $game->userid, true)) {
+            set_daily_login($game->courseid, $game->userid);
         }
 
 
