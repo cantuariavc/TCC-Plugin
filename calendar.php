@@ -106,12 +106,10 @@ function get_numero_dias($mes) {
 }
 
 function get_loged_dates($mes, $numero_dias) {
-    global $SESSION;
+    global $USER;
 
     $couseid = required_param('id', PARAM_INT);
-    
-    $user = $SESSION->game;
-    $userid = $user->id;
+    $userid = $USER->id;
 
     $dias_logados = array();
 
