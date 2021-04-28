@@ -27,6 +27,7 @@ require_once($CFG->dirroot . '/blocks/game/lib.php');
 require_once($CFG->libdir . '/completionlib.php');
 
 require_once('calendar.php');
+require_once('pet.php');
 
 require_login();
 
@@ -190,13 +191,16 @@ if ($couseid > 1) {
             </div>
             
             <div class="tab-pane fade" id="'.$bichinho_virtual.'" role="tabpanel" aria-labelledby="'.$bichinho_virtual.'-tab">
-                <br/>
-                &emsp;Bichinho Virtual
+                <br/>'.
+                get_pet().'
             </div>
             
             <div class="tab-pane fade" id="'.$quests.'" role="tabpanel" aria-labelledby="'.$quests.'-tab"><br/>&emsp;Quests</div>
 
-            <div class="tab-pane fade" id="'.$calendario.'" role="tabpanel" aria-labelledby="'.$calendario.'-tab"><br/>'.get_calendar().'</div>    
+            <div class="tab-pane fade" id="'.$calendario.'" role="tabpanel" aria-labelledby="'.$calendario.'-tab">
+                <br/>'.
+                get_calendar().'
+            </div>    
         
             <div class="tab-pane fade" id="'.$loja.'" role="tabpanel" aria-labelledby="'.$loja.'-tab"><br/>&emsp;Loja</div>
         </div>';
