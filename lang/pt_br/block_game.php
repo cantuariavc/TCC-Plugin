@@ -116,6 +116,10 @@ $string['config_bonus_badge_help'] = '<p>Valor de bônus por emblema de curso co
 $string['config_title'] = 'Alterar título';
 $string['config_title_help'] = '<p>Alterar o título do bloco.</p>';
 
+$string['roulette_btn'] = 'Roleta';
+$string['roulette_title'] = 'Roleta';
+$string['roulette_not_permission'] = 'Você não possui permissão para fazer essa ação!';
+
 $string['perfil_gamer_title'] = 'Informações do jogador';
 $string['set_avatar_title'] = 'Selecione seu Avatar';
 $string['rank_group_game_title'] = 'Lista de classificação de Grupos';

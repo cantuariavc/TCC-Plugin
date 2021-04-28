@@ -116,6 +116,10 @@ $string['config_bonus_badge_help'] = '<p>Bonus value per badge of course complet
 $string['config_title'] = 'Edit title';
 $string['config_title_help'] = '<p>Editing the title of the block.</p>';
 
+$string['roulette_btn'] = 'Roulette';
+$string['roulette_title'] = 'Roulette';
+$string['roulette_not_permission'] = 'You are not allowed to do this!';
+
 $string['perfil_gamer_title'] = 'Player information';
 $string['set_avatar_title'] = 'Select your Avatar';
 $string['rank_group_game_title'] = 'Groups ranking list';
