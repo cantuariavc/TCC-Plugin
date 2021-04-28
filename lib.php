@@ -330,6 +330,28 @@ function get_number_days_logged($first_day, $courseid, $userid) {
     
 }
 
+function get_students_lastaccess($courseid) {
+    global $DB;
+
+    if (!empty($courseid)) {
+        $sql = "SELECT CONCAT(u.firstname, ' ', u.lastname) as nome,
+                       u.lastaccess
+                FROM mdl_user u
+                WHERE u.id IN (
+                    SELECT ue.userid
+                    FROM mdl_enrol e
+                    INNER JOIN mdl_user_enrolments ue
+                    on e.id = ue.enrolid
+                    WHERE e.courseid=?)
+                ORDER BY nome ASC";
+        $students = $DB->get_records_sql($sql, array($courseid));
+
+        return $students;
+    } else {
+        return false;
+    }
+}
+
 /**
  * Return update bonus of day user
  *
