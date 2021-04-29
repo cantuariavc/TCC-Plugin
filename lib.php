@@ -331,10 +331,11 @@ function get_number_days_logged($first_day, $courseid, $userid) {
 }
 
 function get_students_lastaccess($courseid) {
-    global $DB;
+    global $DB, $CFG;
 
     if (!empty($courseid)) {
-        $sql = "SELECT CONCAT(u.firstname, ' ', u.lastname) as nome,
+        $sql = "SELECT u.id,
+                       CONCAT(u.firstname, ' ', u.lastname) as nome,
                        u.lastaccess
                 FROM mdl_user u
                 WHERE u.id IN (
@@ -350,6 +351,18 @@ function get_students_lastaccess($courseid) {
     } else {
         return false;
     }
+}
+
+function update_points($courseid, $userid, $points) {
+    global $DB, $CFG;
+    if (!empty($courseid) && !empty($userid) && !empty($points)) {
+        $sql = "UPDATE {block_game}
+                SET score_bonus_day=?
+                WHERE courseid=? AND userid=?";
+        $DB->execute($sql, array($points, $courseid, $userid));
+        return true;
+    }
+    return false;
 }
 
 /**

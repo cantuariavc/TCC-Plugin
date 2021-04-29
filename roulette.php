@@ -30,32 +30,56 @@ if ($courseid > 1) {
     $context = context_course::instance($courseid, MUST_EXIST);
     if (has_capability('moodle/course:update', $context, $USER->id)) {
         $students = get_students_lastaccess($courseid);
+        $studentsOnline = array();
+        $studentsOffline = array();
+
+        foreach ($students as $student) {
+            if ($student->lastaccess >= time() - 900) {
+                array_push($studentsOnline, $student->id);
+            } else {
+                array_push($studentsOffline, $student->id);
+            }
+        }
+
+        $studentIdOnline = $studentsOnline[array_rand($studentsOnline, 1)];
+        $studentIdOffline = $studentsOffline[array_rand($studentsOffline, 1)];
 
         $outputhtml .= '
-            <div align="center">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">Nome</th>
-                            <th scope="col">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>';
+            <div class="container">
+                <div class="row justify-content-md-center">
+                    <div class="col col-lg-4">
+                        <a type="button" class="btn btn-success" href="'.$CFG->wwwroot.'/blocks/game/add_points.php?id='.$COURSE->id.'&studentId='.$studentIdOnline.'">Adicionar Pontos Aleatoriamente</a>
+                    </div>
+                    <div class="col col-lg-4">
+                        <a type="button" class="btn btn-danger" href="'.$CFG->wwwroot.'/blocks/game/remove_points.php?id='.$COURSE->id.'&studentId='.$studentIdOffline.'">Remover Pontos Aleatoriamente</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>';
         
         foreach ($students as $student) {
-            $name = $student->nome;
-            $status = ($student->lastaccess >= time() - 900) ? "on-line" : "off-line";
-            
+            $status = ($student->lastaccess >= time() - 900) ? "on-line" : "off-line";            
+
             $outputhtml .= '
                 <tr>
-                    <td>'.$name.'</td>
+                    <td>'.$student->nome.'</td>
                     <td>'.$status.'</td>
                 </tr>';
         }
-        
+
         $outputhtml .= '
-                </tbody>
-            </table>';
+                        </tbody>
+                    </table>
+                </div>
+            </div>';
     } else {
         $outputhtml .= '<strong>' . get_string('roulette_not_permission', 'block_game') . '</strong><br/>';
     }
