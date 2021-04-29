@@ -45,11 +45,15 @@ if ($courseid > 1) {
             }
 
             if (update_points($courseid, $studentId, $add_bonus_day_points)) {
-                $outputhtml .= '<strong>' . get_string('add_points_sucess', 'block_game')
-                        . '</strong><br/><br/><a class="btn btn-success" href="' . $CFG->wwwroot . '/course/view.php?id='
-                        . $courseid . '">' . get_string('ok', 'block_game') . '</a>';
+                $outputhtml .= '<strong>'.get_string('add_points_success', 'block_game').'</strong><br/><br/>
+                                <a class="btn btn-success" href="'.$CFG->wwwroot.'/course/view.php?id='.$courseid.'">'. 
+                                    get_string('ok', 'block_game').
+                                '</a>';
             } else {
-                $outputhtml .= '<strong>' . get_string('add_points_error', 'block_game') . '</strong><br/>';
+                $outputhtml .= '<strong>'.get_string('add_points_error', 'block_game').'</strong><br/><br/>
+                                <a class="btn btn-warning" href="'.$CFG->wwwroot.'/course/view.php?id='.$courseid.'">'. 
+                                    get_string('ok', 'block_game').
+                                '</a>';
             }
         } else {
             $outputhtml .= '<strong>' . get_string('label_confirm_add_points', 'block_game') . '</strong><br/><br/>';
