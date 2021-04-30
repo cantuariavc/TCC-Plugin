@@ -355,7 +355,7 @@ function get_students_lastaccess($courseid) {
 
 function update_points($courseid, $userid, $points) {
     global $DB, $CFG;
-    if (!empty($courseid) && !empty($userid) && !empty($points)) {
+    if (!empty($courseid) && !empty($userid) && $points >= 0) {
         $sql = "UPDATE {block_game}
                 SET score_bonus_day=?
                 WHERE courseid=? AND userid=?";
