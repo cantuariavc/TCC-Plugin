@@ -269,6 +269,122 @@ function reset_points_game($courseid) {
     return false;
 }
 
+
+function set_daily_login($courseid, $userid) {
+    global $DB, $CFG;
+    if (!empty($courseid) && !empty($userid)) {
+        $sql = "INSERT INTO {block_game_daily_login}(loginday, courseid, userid) VALUES (?, ?, ?)";
+        $DB->execute($sql, array(date('Y-m-d'), $courseid, $userid));
+  
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function get_daily_login($courseid, $userid, $today=false, $month='0', $days='0') {
+    global $DB, $CFG;
+    if (!empty($courseid) && !empty($userid)) {
+        if ($today) {
+            $sql = "SELECT * FROM {block_game_daily_login} WHERE loginday=? AND courseid=? AND userid=?";
+            $days = $DB->get_records_sql($sql, array(date('Y-m-d'), $courseid, $userid));
+        } else {
+            $sql = "SELECT * FROM {block_game_daily_login} WHERE loginday >= ? AND loginday <= ? AND courseid=? AND userid=? ORDER BY loginday ASC";
+            $days = $DB->get_records_sql($sql, array(date('Y-'.$month.'-01'), date('Y-'.$month.'-'.$days), $courseid, $userid));
+        }
+
+        return $days;
+    } else {
+        return false;
+    }
+}
+
+function get_course_registration_day($couseid, $userid) {
+    global $DB, $CFG;
+    if (!empty($couseid) && !empty($userid)) {
+        $sql = "SELECT ue.timestart
+                FROM {enrol} e
+                INNER JOIN {user_enrolments} ue
+                on e.id = ue.enrolid
+                WHERE e.courseid=? AND ue.userid=?";
+        $first_day = $DB->get_records_sql($sql, array($couseid, $userid));
+        
+        return $first_day;
+    } else {
+        return false;
+    }
+}
+
+function get_number_days_logged($first_day, $courseid, $userid) {
+    global $DB, $CFG;
+    if (!empty($first_day) && !empty($courseid) && !empty($userid)) {
+        $sql = "SELECT COUNT(loginday)
+                FROM {block_game_daily_login}
+                WHERE loginday >= ? AND courseid=? AND userid=?";
+        $days_logged = $DB->get_records_sql($sql, array($first_day, $courseid, $userid));
+        
+        return $days_logged;
+    } else {
+        return false;
+    }
+    
+}
+
+function get_students_lastaccess($courseid) {
+    global $DB, $CFG;
+
+    if (!empty($courseid)) {
+        $sql = "SELECT u.id,
+                       CONCAT(u.firstname, ' ', u.lastname) as nome,
+                       u.lastaccess
+                FROM mdl_user u
+                WHERE u.id IN (
+                    SELECT ue.userid
+                    FROM mdl_enrol e
+                    INNER JOIN mdl_user_enrolments ue
+                    on e.id = ue.enrolid
+                    WHERE e.courseid=?)
+                ORDER BY nome ASC";
+        $students = $DB->get_records_sql($sql, array($courseid));
+
+        return $students;
+    } else {
+        return false;
+    }
+}
+
+function update_points($courseid, $userid, $points) {
+    global $DB, $CFG;
+    if (!empty($courseid) && !empty($userid) && $points >= 0) {
+        $sql = "UPDATE {block_game}
+                SET score_bonus_day=?
+                WHERE courseid=? AND userid=?";
+        $DB->execute($sql, array($points, $courseid, $userid));
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function get_student_name($courseid, $userid) {
+    global $DB, $CFG;
+    if (!empty($courseid) && !empty($userid)) {
+        $sql = "SELECT CONCAT(u.firstname, ' ', u.lastname) as nome
+                FROM mdl_user u
+                WHERE u.id IN (
+                    SELECT ue.userid
+                    FROM mdl_enrol e
+                    INNER JOIN mdl_user_enrolments ue
+                    on e.id = ue.enrolid
+                    WHERE e.courseid=? AND u.id=?)
+                ORDER BY nome ASC";
+        $student = $DB->get_records_sql($sql, array($courseid, $userid));
+        return $student;
+    } else {
+        return false;
+    }
+}
+
 /**
  * Return update bonus of day user
  *
