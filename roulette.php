@@ -28,16 +28,18 @@ $outputhtml = '<div class="boxs">';
 
 if ($courseid > 1) {
     $context = context_course::instance($courseid, MUST_EXIST);
-    if (has_capability('moodle/course:update', $context, $USER->id)) {
+    if (has_capability('moodle/course:update', $context, $student->id)) {
         $students = get_students_lastaccess($courseid);
         $studentsOnline = array();
         $studentsOffline = array();
 
         foreach ($students as $student) {
-            if ($student->lastaccess >= time() - 900) {
-                array_push($studentsOnline, $student->id);
-            } else {
-                array_push($studentsOffline, $student->id);
+            if (!has_capability('moodle/course:update', $context, $USER->id)) {
+                if ($student->lastaccess >= time() - 900) {
+                    array_push($studentsOnline, $student->id);
+                } else {
+                    array_push($studentsOffline, $student->id);
+                }
             }
         }
 
@@ -67,19 +69,21 @@ if ($courseid > 1) {
                             <tbody>';
         
         foreach ($students as $student) {
-            if ($student->lastaccess >= time() - 900) {
-                $status = "on-line";
-                $color = "green";
-            } else {
-                $status = "off-line";
-                $color = "red";
+            if (!has_capability('moodle/course:update', $context, $student->id)) {
+                if ($student->lastaccess >= time() - 900) {
+                    $status = "on-line";
+                    $color = "green";
+                } else {
+                    $status = "off-line";
+                    $color = "red";
+                }
+                
+                $outputhtml .= '
+                    <tr>
+                        <td>'.$student->nome.'</td>
+                        <td style="color:'.$color.'">'.$status.'</td>
+                    </tr>';
             }
-            
-            $outputhtml .= '
-                <tr>
-                    <td>'.$student->nome.'</td>
-                    <td style="color:'.$color.'">'.$status.'</td>
-                </tr>';
         }
 
         $outputhtml .= '
