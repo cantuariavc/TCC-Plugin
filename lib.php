@@ -929,3 +929,26 @@ function is_student_user($userid, $courseid) {
     }
     return 0;
 }
+
+
+/**
+ * Return list of activities from course.
+ *
+ * @param int $courseid
+ * @return mixed
+ */
+function get_course_activities($courseid) {
+    global $DB, $CFG;
+
+    if (!empty($courseid)) {
+      $sql = 'SELECT q.name, q.id'
+              . ' FROM {course} c'
+              . ' INNER JOIN {quiz} q ON q.course = c.id'
+              . ' WHERE c.id = ?'
+              . 'ORDER BY name';
+
+      $activities = $DB->get_records_sql($sql, array($courseid));
+      return $activities;
+    }
+    return false;
+}
