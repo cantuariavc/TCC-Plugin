@@ -1051,3 +1051,25 @@ function get_qntd_respond_course($courseid, $quizid) {
     }
     return false;
 }
+
+/**
+ * Return number of students from course.
+ *
+ * @param int $courseid
+ * @return mixed
+ */
+function get_qntd_enrols_course($courseid) {
+    global $DB, $CFG;
+
+    if (!empty($courseid)) {
+      $sql = "SELECT COUNT(u.id) as qntdMatriculados FROM mdl_course c
+              INNER JOIN mdl_enrol e ON c.id = e.courseid
+              INNER JOIN mdl_user_enrolments ue ON e.id = ue.enrolid
+              INNER JOIN mdl_user u ON u.id = ue.userid
+              WHERE c.id = ?";
+
+      $qntdMatriculados = $DB->get_records_sql($sql, array($courseid));
+      return $qntdMatriculados;
+    }
+    return false;
+}
