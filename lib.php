@@ -376,10 +376,22 @@ function get_student_name($courseid, $userid) {
                     FROM mdl_enrol e
                     INNER JOIN mdl_user_enrolments ue
                     on e.id = ue.enrolid
-                    WHERE e.courseid=? AND u.id=?)
-                ORDER BY nome ASC";
+                    WHERE e.courseid=? AND u.id=?)";
         $student = $DB->get_records_sql($sql, array($courseid, $userid));
         return $student;
+    } else {
+        return false;
+    }
+}
+
+function get_student_score_bonus_day($courseid, $userid) {
+    global $DB, $CFG;
+    if (!empty($courseid) && !empty($userid)) {
+        $sql = "SELECT bg.score_bonus_day
+                FROM mdl_block_game bg
+                WHERE bg.courseid=? AND bg.userid=?";
+        $student_score_bonus_day = $DB->get_records_sql($sql, array($courseid, $userid));
+        return $student_score_bonus_day;
     } else {
         return false;
     }

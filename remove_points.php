@@ -40,10 +40,11 @@ if ($courseid > 1) {
                 <h4>Estudante sorteado: '.key(get_student_name($courseid, $studentId)).'</h4>
                 <h5>';
             if ($confirm > 0) {
+                $student_score_bonus_day = key(get_student_score_bonus_day($courseid, $studentId));
                 if (isset($game->config->bonus_day)) {
-                    $remove_bonus_day_points = $game->score_bonus_day - $game->config->bonus_day;
+                    $remove_bonus_day_points = $student_score_bonus_day - $game->config->bonus_day;
                 } else {
-                    $remove_bonus_day_points = $game->score_bonus_day - 20;
+                    $remove_bonus_day_points = $student_score_bonus_day - 20;
                 }
                 $remove_bonus_day_points = ($remove_bonus_day_points < 0) ? 0 : $remove_bonus_day_points ;
 
