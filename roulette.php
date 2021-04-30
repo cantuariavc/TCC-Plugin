@@ -28,13 +28,13 @@ $outputhtml = '<div class="boxs">';
 
 if ($courseid > 1) {
     $context = context_course::instance($courseid, MUST_EXIST);
-    if (has_capability('moodle/course:update', $context, $student->id)) {
+    if (has_capability('moodle/course:update', $context, $USER->id)) {
         $students = get_students_lastaccess($courseid);
         $studentsOnline = array();
         $studentsOffline = array();
 
         foreach ($students as $student) {
-            if (!has_capability('moodle/course:update', $context, $USER->id)) {
+            if (!has_capability('moodle/course:update', $context, $student->id)) {
                 if ($student->lastaccess >= time() - 900) {
                     array_push($studentsOnline, $student->id);
                 } else {
