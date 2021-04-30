@@ -86,7 +86,7 @@ function xmldb_block_game_upgrade($oldversion = 0) {
         upgrade_block_savepoint(true, 2020042996, 'game');
     }
 
-    if ($oldversion < 2021033032) {
+    if ($oldversion < 2021033035) {
         // Create table 'block_game_daily_login'.
         $table = new xmldb_table('block_game_daily_login');
 
@@ -96,7 +96,6 @@ function xmldb_block_game_upgrade($oldversion = 0) {
         $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
 
         // Adding keys to table block_game_daily_login.
-        $table->add_key('primary', XMLDB_KEY_PRIMARY, array('loginday'));
         $table->add_key('courseid', XMLDB_KEY_FOREIGN, ['courseid'], 'course', ['id']);
         $table->add_key('userid', XMLDB_KEY_FOREIGN, ['userid'], 'user', ['id']);
         
@@ -104,7 +103,7 @@ function xmldb_block_game_upgrade($oldversion = 0) {
             $dbman->create_table($table);
         }
         
-        upgrade_block_savepoint(true, 2021033032, 'game');
+        upgrade_block_savepoint(true, 2021033035, 'game');
     }
 
     return true;

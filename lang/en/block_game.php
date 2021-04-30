@@ -116,6 +116,20 @@ $string['config_bonus_badge_help'] = '<p>Bonus value per badge of course complet
 $string['config_title'] = 'Edit title';
 $string['config_title_help'] = '<p>Editing the title of the block.</p>';
 
+$string['roulette_btn'] = 'Roulette';
+$string['roulette_title'] = 'Roulette';
+$string['roulette_not_permission'] = 'You are not allowed to do this!';
+
+$string['add_points_title'] = 'Randomly Add Points';
+$string['label_confirm_add_points'] = 'Randomly add points to an online user? <br/> Do you really want to do this? <br/> <br/>';
+$string['add_points_success'] = 'Points added to a random user successfully!';
+$string['add_points_error'] = 'Error when adding points to random user!';
+
+$string['remove_points_title'] = 'Randomly Remove Points';
+$string['label_confirm_remove_points'] = 'Randomly remove points from an offline user? <br/> Do you really want to do this? <br/> <br/>';
+$string['remove_points_success'] = 'Points removed from a random user successfully!';
+$string['remove_points_error'] = 'Error when removing points from random user!';
+
 $string['perfil_gamer_title'] = 'Player information';
 $string['set_avatar_title'] = 'Select your Avatar';
 $string['rank_group_game_title'] = 'Groups ranking list';

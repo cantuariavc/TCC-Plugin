@@ -116,6 +116,21 @@ $string['config_bonus_badge_help'] = '<p>Valor de bônus por emblema de curso co
 $string['config_title'] = 'Alterar título';
 $string['config_title_help'] = '<p>Alterar o título do bloco.</p>';
 
+$string['roulette_btn'] = 'Roleta';
+$string['roulette_title'] = 'Roleta';
+$string['roulette_not_permission'] = 'Você não possui permissão para fazer essa ação!';
+
+$string['add_points_title'] = 'Adicionar Pontos Aleatoriamente';
+$string['label_confirm_add_points'] = 'Adicionar pontos aleatoriamente a um usuário online? <br/> Você realmente quer fazer isso? <br/> <br/>';
+$string['add_points_success'] = 'Pontos adicionados a um usuário aleatório com sucesso!';
+$string['add_points_error'] = 'Erro ao adicionar pontos ao usuário aleatório!';
+
+$string['remove_points_title'] = 'Remover Pontos Aleatoriamente';
+$string['label_confirm_remove_points'] = 'Remover pontos aleatoriamente de um usuário offline? <br/> Você realmente quer fazer isso? <br/> <br/>';
+$string['remove_points_success'] = 'Pontos removidos de um usuário aleatório com sucesso!';
+$string['remove_points_error'] = 'Erro ao remover pontos de um usuário aleatório!';
+
+
 $string['perfil_gamer_title'] = 'Informações do jogador';
 $string['set_avatar_title'] = 'Selecione seu Avatar';
 $string['rank_group_game_title'] = 'Lista de classificação de Grupos';
