@@ -952,3 +952,26 @@ function get_course_activities($courseid) {
     }
     return false;
 }
+
+/**
+ * Return list of participants from course.
+ *
+ * @param int $courseid
+ * @return mixed
+ */
+function get_course_students($courseid) {
+    global $DB, $CFG;
+
+    if (!empty($courseid)) {
+      $sql = "SELECT u.id, u.username, CONCAT(u.firstname, ' ', u.lastname) as nome
+               FROM {course} c
+               INNER JOIN {enrol} e ON c.id = e.courseid
+               INNER JOIN {user_enrolments} ue ON e.id = ue.enrolid
+               INNER JOIN {user} u ON u.id = ue.userid
+               WHERE c.id = ?";
+
+      $matriculados = $DB->get_records_sql($sql, array($courseid));
+      return $matriculados;
+    }
+    return false;
+}
