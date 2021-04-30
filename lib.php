@@ -975,3 +975,27 @@ function get_course_students($courseid) {
     }
     return false;
 }
+
+/**
+ * Return list of activities from course.
+ *
+ * @param int $courseid $quizid
+ * @return mixed
+ */
+function get_activitie_students($courseid, $quizid) {
+    global $DB, $CFG;
+
+    if (!empty($courseid)) {
+      $sql = "SELECT u.id, u.username, CONCAT(u.firstname, ' ', u.lastname) as nome
+                FROM {course} c
+                INNER JOIN {quiz} q ON q.course = c.id
+                INNER JOIN {quiz_attempts} qa ON qa.quiz = q.id
+                INNER JOIN {user} u ON qa.userid = u.id
+                WHERE c.id = ? and q.id = ?
+                GROUP BY u.id, username, nome";
+
+      $responderam = $DB->get_records_sql($sql, array($courseid, $quizid));
+      return $responderam;
+    }
+    return false;
+}
