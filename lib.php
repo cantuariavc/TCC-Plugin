@@ -361,8 +361,28 @@ function update_points($courseid, $userid, $points) {
                 WHERE courseid=? AND userid=?";
         $DB->execute($sql, array($points, $courseid, $userid));
         return true;
+    } else {
+        return false;
     }
-    return false;
+}
+
+function get_student_name($courseid, $userid) {
+    global $DB, $CFG;
+    if (!empty($courseid) && !empty($userid)) {
+        $sql = "SELECT CONCAT(u.firstname, ' ', u.lastname) as nome
+                FROM mdl_user u
+                WHERE u.id IN (
+                    SELECT ue.userid
+                    FROM mdl_enrol e
+                    INNER JOIN mdl_user_enrolments ue
+                    on e.id = ue.enrolid
+                    WHERE e.courseid=? AND u.id=?)
+                ORDER BY nome ASC";
+        $student = $DB->get_records_sql($sql, array($courseid, $userid));
+        return $student;
+    } else {
+        return false;
+    }
 }
 
 /**

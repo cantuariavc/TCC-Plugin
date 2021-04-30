@@ -54,6 +54,7 @@ if ($courseid > 1) {
                         <a type="button" class="btn btn-danger" href="'.$CFG->wwwroot.'/blocks/game/remove_points.php?id='.$COURSE->id.'&studentId='.$studentIdOffline.'">Remover Pontos Aleatoriamente</a>
                     </div>
                 </div>
+                </br>
                 <div class="row">
                     <div class="col">
                         <table class="table table-striped">
@@ -66,12 +67,18 @@ if ($courseid > 1) {
                             <tbody>';
         
         foreach ($students as $student) {
-            $status = ($student->lastaccess >= time() - 900) ? "on-line" : "off-line";            
-
+            if ($student->lastaccess >= time() - 900) {
+                $status = "on-line";
+                $color = "green";
+            } else {
+                $status = "off-line";
+                $color = "red";
+            }
+            
             $outputhtml .= '
                 <tr>
                     <td>'.$student->nome.'</td>
-                    <td>'.$status.'</td>
+                    <td style="color:'.$color.'">'.$status.'</td>
                 </tr>';
         }
 

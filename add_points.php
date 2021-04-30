@@ -33,10 +33,10 @@ if ($courseid > 1) {
     if (has_capability('moodle/course:update', $context, $USER->id)) {
         $outputhtml .= '<div align="center">';
 
-        $outputhtml .= '<h3>( ' . get_string('add_points_title', 'block_game') . ': <strong>'
-                . $course->fullname . '</strong> )</h3><br/>';
-
-        $outputhtml .= '<br/><h5>';
+        $outputhtml .= '
+            <h3>( '.get_string('add_points_title', 'block_game').': <strong>'.$course->fullname.'</strong> )</h3><br/><br/>
+            <h4>Estudante sorteado: <b>'.key(get_student_name($courseid, $studentId)).'</b></h4>
+            <h5>';
         if ($confirm > 0) {
             if (isset($game->config->bonus_day)) {
                 $add_bonus_day_points = $game->score_bonus_day + $game->config->bonus_day;
@@ -47,22 +47,26 @@ if ($courseid > 1) {
             if (update_points($courseid, $studentId, $add_bonus_day_points)) {
                 $outputhtml .= '<strong>'.get_string('add_points_success', 'block_game').'</strong><br/><br/>
                                 <a class="btn btn-success" href="'.$CFG->wwwroot.'/course/view.php?id='.$courseid.'">'. 
-                                    get_string('ok', 'block_game').
-                                '</a>';
+                                    get_string('ok', 'block_game').'
+                                </a>';
             } else {
                 $outputhtml .= '<strong>'.get_string('add_points_error', 'block_game').'</strong><br/><br/>
                                 <a class="btn btn-warning" href="'.$CFG->wwwroot.'/course/view.php?id='.$courseid.'">'. 
-                                    get_string('ok', 'block_game').
-                                '</a>';
+                                    get_string('ok', 'block_game').'
+                                </a>';
             }
         } else {
-            $outputhtml .= '<strong>' . get_string('label_confirm_add_points', 'block_game') . '</strong><br/><br/>';
-            $outputhtml .= '<a class="btn btn-secondary" href="' . $CFG->wwwroot . '/course/view.php?id=' . $courseid . '">'
-                    . get_string('no', 'block_game') . '</a>' . '  <a class="btn btn-success" href="add_points.php?id='
-                    . $courseid . '&studentId='.$studentId.'&c=1">' . get_string('yes', 'block_game') . '</a>' . '<br/>';
+            $outputhtml .= '<strong>'.get_string('label_confirm_add_points', 'block_game').'</strong><br/><br/>
+                            <a class="btn btn-secondary" href="'.$CFG->wwwroot.'/course/view.php?id='.$courseid.'">'.
+                                get_string('no', 'block_game').'
+                            </a>
+                            <a class="btn btn-success" href="add_points.php?id='.$courseid.'&studentId='.$studentId.'&c=1">'.
+                                get_string('yes', 'block_game').'
+                            </a><br/>';
         }
-        $outputhtml .= '</h5>';
-        $outputhtml .= '</div>';
+        $outputhtml .= '
+                </h5>
+            </div>';
     } else {
         $outputhtml .= '<strong>' . get_string('add_points_not_permission', 'block_game') . '</strong><br/>';
     }
