@@ -999,3 +999,33 @@ function get_activitie_students($courseid, $quizid) {
     }
     return false;
 }
+
+/**
+ * Return list of activities from course.
+ *
+ * @param int $courseid $quizid
+ * @return mixed
+ */
+function get_not_activitie_students($courseid, $quizid) {
+    global $DB, $CFG;
+
+    if (!empty($courseid)) {
+      $sql = "SELECT u.id, username,CONCAT(u.firstname, ' ', u.lastname) as Nome FROM mdl_course c
+              INNER JOIN mdl_enrol e ON c.id = e.courseid
+              INNER JOIN mdl_user_enrolments ue ON e.id = ue.enrolid
+              INNER JOIN mdl_user u ON u.id = ue.userid
+              WHERE c.id = ? and u.id NOT IN
+              (
+              SELECT u.id FROM mdl_course c
+              INNER JOIN mdl_quiz q on q.course = c.id
+              INNER JOIN mdl_quiz_attempts qa on qa.quiz = q.id
+              INNER JOIN mdl_user u on qa.userid = u.id
+              WHERE c.id = ? and q.id = ?
+              GROUP BY u.id
+              );";
+
+      $naoresponderam = $DB->get_records_sql($sql, array($courseid, $courseid, $quizid));
+      return $naoresponderam;
+    }
+    return false;
+}
