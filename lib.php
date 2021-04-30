@@ -1001,7 +1001,7 @@ function get_activitie_students($courseid, $quizid) {
 }
 
 /**
- * Return list of activities from course.
+ * Return list of students that did not respond a quiz from course.
  *
  * @param int $courseid $quizid
  * @return mixed
@@ -1026,6 +1026,28 @@ function get_not_activitie_students($courseid, $quizid) {
 
       $naoresponderam = $DB->get_records_sql($sql, array($courseid, $courseid, $quizid));
       return $naoresponderam;
+    }
+    return false;
+}
+
+/**
+ * Return number of students that respond a quiz from course.
+ *
+ * @param int $courseid $quizid
+ * @return mixed
+ */
+function get_qntd_respond_course($courseid, $quizid) {
+    global $DB, $CFG;
+
+    if (!empty($courseid)) {
+      $sql = "SELECT COUNT(DISTINCT u.id) FROM mdl_course c
+              INNER JOIN mdl_quiz q on q.course = c.id
+              INNER JOIN mdl_quiz_attempts qa on qa.quiz = q.id
+              INNER JOIN mdl_user u on qa.userid = u.id
+              WHERE c.id = ? and q.id = ?";
+
+      $qntdResponderam = $DB->get_records_sql($sql, array($courseid, $quizid));
+      return $qntdResponderam;
     }
     return false;
 }
