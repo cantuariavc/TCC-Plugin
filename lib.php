@@ -275,7 +275,7 @@ function set_daily_login($courseid, $userid) {
     if (!empty($courseid) && !empty($userid)) {
         $sql = "INSERT INTO {block_game_daily_login}(loginday, courseid, userid) VALUES (?, ?, ?)";
         $DB->execute($sql, array(date('Y-m-d'), $courseid, $userid));
-  
+
         return true;
     } else {
         return false;
@@ -308,7 +308,7 @@ function get_course_registration_day($couseid, $userid) {
                 on e.id = ue.enrolid
                 WHERE e.courseid=? AND ue.userid=?";
         $first_day = $DB->get_records_sql($sql, array($couseid, $userid));
-        
+
         return $first_day;
     } else {
         return false;
@@ -322,12 +322,12 @@ function get_number_days_logged($first_day, $courseid, $userid) {
                 FROM {block_game_daily_login}
                 WHERE loginday >= ? AND courseid=? AND userid=?";
         $days_logged = $DB->get_records_sql($sql, array($first_day, $courseid, $userid));
-        
+
         return $days_logged;
     } else {
         return false;
     }
-    
+
 }
 
 function get_students_lastaccess($courseid) {
@@ -1178,11 +1178,12 @@ function get_qntd_enrols_course($courseid) {
     global $DB, $CFG;
 
     if (!empty($courseid)) {
-      $sql = "SELECT COUNT(u.id) as qntdMatriculados FROM mdl_course c
+      $sql = "SELECT c.id, COUNT(u.id) as qntdMatriculados FROM mdl_course c
               INNER JOIN mdl_enrol e ON c.id = e.courseid
               INNER JOIN mdl_user_enrolments ue ON e.id = ue.enrolid
               INNER JOIN mdl_user u ON u.id = ue.userid
-              WHERE c.id = ?";
+              WHERE c.id = ?
+              GROUP BY c.id";
 
       $qntdMatriculados = $DB->get_records_sql($sql, array($courseid));
       return $qntdMatriculados;
