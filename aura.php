@@ -123,4 +123,28 @@ $activities_html = '
   return $activities_html;
 }
 
+function students_missing_activity() {
+
+  $courseid = required_param('id', PARAM_INT);
+  $activities = get_course_activities($courseid);
+  $qntdMatriculados = get_qntd_enrols_course($courseid);
+
+$studentsCompleted = array();
+$qntdResponderamFormulario  = array();
+foreach ($activities as $activity ) {
+  unset($qntdResponderamFormulario);
+  $quizid = $activity->id;
+
+  $qntdResponderamFormulario [] = get_qntd_respond_course($courseid, $quizid);
+  foreach ($qntdResponderamFormulario[0] as $responderam) {
+    if ($responderam->count === $qntdMatriculados[$courseid]->qntdmatriculados) {
+        echo "Adiciona ponto pra todos os alunos";
+    }
+  }
+}
+
+}
+
+
+
 ?>
