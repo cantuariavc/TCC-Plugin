@@ -448,7 +448,8 @@ function bonus_of_day($game, $bonus) {
                 . '  FROM {block_game} WHERE courseid=? AND userid=?';
         $busca = $DB->get_record_sql($sql, array($game->courseid, $game->userid));
         if ($busca->bonus_day == null || $busca->bonus_day < $busca->hoje) {
-            $game->score_bonus_day = ((int) $game->score_bonus_day + (int) $bonus);
+            $loginSequence = key(get_login_sequence($game->userid)) * 0.1;
+            $game->score_bonus_day = (int) $game->score_bonus_day + ((int) $bonus * (1 + $loginSequence));
             $DB->execute("UPDATE {block_game} SET score_bonus_day=?, bonus_day=?  WHERE id=?",
                     array((int) $game->score_bonus_day, $busca->hoje, $game->id));
         }
