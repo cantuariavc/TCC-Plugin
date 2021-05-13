@@ -29,6 +29,7 @@ require_once($CFG->libdir . '/completionlib.php');
 require_once('calendar.php');
 require_once('pet.php');
 require_once('aura.php');
+require_once('conquistas.php');
 
 require_login();
 
@@ -183,7 +184,7 @@ if ($couseid > 1) {
 
             <div class="tab-pane fade" id="'.$emblemas.'" role="tabpanel" aria-labelledby="'.$emblemas.'-tab">' . '
                 <br/>'.
-                get_badges($game, $DB, $CFG).'
+                show_achievments().'
             </div>
 
             <div class="tab-pane fade" id="'.$ranking.'" role="tabpanel" aria-labelledby="'.$ranking.'-tab">' . '
@@ -200,7 +201,7 @@ if ($couseid > 1) {
               show_activities() .'
             </div>
 
-            <div class="tab-pane fade" id="'.$calendario.'" role="tabpanel" aria-labelledby="'.$calendario.'-tab"> 
+            <div class="tab-pane fade" id="'.$calendario.'" role="tabpanel" aria-labelledby="'.$calendario.'-tab">
                 <br/>'.
                 get_calendar().'
             </div>
