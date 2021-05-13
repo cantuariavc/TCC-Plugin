@@ -203,6 +203,16 @@ class block_game extends block_base {
             bonus_of_day($game, $addbonusday);
         }
 
+        // Bonus of day.
+        if (isset($game->config->aura_efect)) {
+            $addauraefect = $game->config->aura_efect;
+        } else {
+            $addauraefect = 0;
+        }
+        if ($addauraefect > 0 && $scoreok) {
+            bonus_of_day($game, $addauraefect);
+        }
+
         // Bonus of badge.
         if (isset($cfggame->bonus_badge)) {
             $bonusbadge = $cfggame->bonus_badge;
@@ -258,7 +268,7 @@ class block_game extends block_base {
                         . $CFG->wwwroot . '/blocks/game/reset_points_course.php?id=' . $COURSE->id
                         . '"><img alt="' . get_string('reset_points_btn', 'block_game') . '" hspace="12" src="'
                         . $CFG->wwwroot . '/blocks/game/pix/reset.png"/></a>';
-                
+
                 $roulette = '
                     <a title="'.get_string('roulette_btn', 'block_game').'" href="'.$CFG->wwwroot.'/blocks/game/roulette.php?id='.$COURSE->id.'">
                         <img style="padding: 1px 0 15px 15px" alt="'.get_string('roulette_btn', 'block_game').'" hspace="12" src="'.$CFG->wwwroot.'/blocks/game/pix/fortune-wheel.png"/>
