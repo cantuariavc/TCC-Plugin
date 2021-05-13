@@ -8,6 +8,8 @@ require_login();
 
 global $USER, $SESSION, $COURSE, $OUTPUT, $CFG;
 
+$game = new stdClass();
+$game = $SESSION->game;
 
 $courseid = required_param('id', PARAM_INT);
 
@@ -15,8 +17,6 @@ $groupid = optional_param('group', 0, PARAM_INT);
 
 $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
 
-$game = new stdClass();
-$game = $SESSION->game;
 
 require_login($course);
 $context = context_course::instance($courseid);
@@ -119,15 +119,20 @@ $activities_html = '
                       </div>
                   </div>
               </section>';
-
+  add_aura_effect_points();
   return $activities_html;
 }
 
-function students_missing_activity() {
+function add_aura_effect_points() {
+  global $USER, $SESSION, $COURSE, $OUTPUT, $CFG;
+
+  $game = new stdClass();
+  $game = $SESSION->game;
 
   $courseid = required_param('id', PARAM_INT);
   $activities = get_course_activities($courseid);
   $qntdMatriculados = get_qntd_enrols_course($courseid);
+  $studentsFromCourse[] = get_course_students($courseid);
 
 $studentsCompleted = array();
 $qntdResponderamFormulario  = array();
@@ -138,13 +143,12 @@ foreach ($activities as $activity ) {
   $qntdResponderamFormulario [] = get_qntd_respond_course($courseid, $quizid);
   foreach ($qntdResponderamFormulario[0] as $responderam) {
     if ($responderam->count === $qntdMatriculados[$courseid]->qntdmatriculados) {
-        echo "Adiciona ponto pra todos os alunos";
+        foreach ($studentsFromCourse[0] as $student) {
+          $studentId = $student->id;
+          update_activities_points($courseid, $studentId, $game->config->aura_efect);
+        }
     }
   }
 }
-
 }
-
-
-
 ?>
