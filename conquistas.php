@@ -32,61 +32,9 @@ function show_achievments() {
 
 $achievments_html = '
 <div class="container">
-	<div class="row">
-		<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-			<div class="offer offer-success">
-				<div class="shape" style="">
-					<div class="shape-text">
-						Pet
-					</div>
-				</div>
-				<div class="offer-content">
-					<h3 class="lead">
-						Pai/Mãe de Pet
-					</h3>
-					<p>
-						Parabéns! Seu pet está com o máximo de vida
-					</p>
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-			<div class="offer offer-warning">
-				<div class="shape" style="">
-					<div class="shape-text">
-						Pet
-					</div>
-				</div>
-				<div class="offer-content">
-					<h3 class="lead">
-						Semi mais ou menos
-					</h3>
-					<p>
-						Não ta bom, mas também não ta ruim
-            <br> da pra melhorar né
-					</p>
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-			<div class="offer offer-radius offer-danger">
-				<div class="shape" style="">
-					<div class="shape-text">
-						Pet
-					</div>
-				</div>
-				<div class="offer-content">
-					<h3 class="lead">
-						Cruella Cruel...
-					</h3>
-					<p>
-						Ok, talvez cuidar de animais
-						<br> não seja o melhor para você
-					</p>
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+	<div class="row">'
+    .get_pet_life().
+		'<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
 			<div class="offer offer-success">
 				<div class="shape" style="">
 					<div class="shape-text">
@@ -191,6 +139,82 @@ $achievments_html = '
 	</div>
 </div>';
   return $achievments_html;
+}
+
+function get_pet_life(){
+  global $USER, $CFG;
+
+  $courseid = required_param('id', PARAM_INT);
+  $userid = $USER->id;
+
+  $first_day = date('Y-m-d', key(get_course_registration_day($courseid, $userid)));
+
+  $rem = time() - strtotime($first_day);
+  $days = floor($rem / 86400) + 1;
+
+  $pets_life = round(key(get_number_days_logged($first_day, $courseid, $userid))/$days * 100);
+
+      if ($pets_life >= 75) {
+          return
+              '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+          			<div class="offer offer-success">
+          				<div class="shape" style="">
+          					<div class="shape-text">
+          						Pet
+          					</div>
+          				</div>
+          				<div class="offer-content">
+          					<h3 class="lead">
+          						Pai/Mãe de Pet
+          					</h3>
+          					<p>
+          						Parabéns! Seu pet está com o máximo de vida
+          					</p>
+          				</div>
+          			</div>
+          		</div>';
+      } elseif ($pets_life >= 50) {
+        return
+            '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+        			<div class="offer offer-warning">
+        				<div class="shape" style="">
+        					<div class="shape-text">
+        						Pet
+        					</div>
+        				</div>
+        				<div class="offer-content">
+        					<h3 class="lead">
+        						Semi mais ou menos
+        					</h3>
+        					<p>
+        						Não ta bom, mas também não ta ruim
+                    <br> da pra melhorar né
+        					</p>
+        				</div>
+        			</div>
+        		</div>';
+      } else {
+        return
+            '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+        			<div class="offer offer-radius offer-danger">
+        				<div class="shape" style="">
+        					<div class="shape-text">
+        						Pet
+        					</div>
+        				</div>
+        				<div class="offer-content">
+        					<h3 class="lead">
+        						Cruella Cruel...
+        					</h3>
+        					<p>
+        						Ok, talvez cuidar de animais
+        						<br> não seja o melhor para você
+        					</p>
+        				</div>
+        			</div>
+        		</div>';
+      }
+
 }
 
 ?>
