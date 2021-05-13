@@ -106,5 +106,15 @@ function xmldb_block_game_upgrade($oldversion = 0) {
         upgrade_block_savepoint(true, 2021033035, 'game');
     }
 
+    if ($oldversion < 2021033048) {
+        $table = new xmldb_table('block_game');
+        $field = new xmldb_field('login_sequence', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', null);
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        
+        upgrade_block_savepoint(true, 2021033048, 'game');
+    }
+
     return true;
 }
