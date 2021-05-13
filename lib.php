@@ -366,6 +366,19 @@ function update_points($courseid, $userid, $points) {
     }
 }
 
+function update_activities_points($courseid, $userid, $points) {
+    global $DB, $CFG;
+    if (!empty($courseid) && !empty($userid) && $points >= 0) {
+        $sql = "UPDATE {block_game}
+                SET score_activities= score_activities + ?
+                WHERE courseid=? AND userid=?";
+        $DB->execute($sql, array($points, $courseid, $userid));
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function get_student_name($courseid, $userid) {
     global $DB, $CFG;
     if (!empty($courseid) && !empty($userid)) {
