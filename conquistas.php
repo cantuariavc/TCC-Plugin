@@ -23,10 +23,11 @@ $context = context_course::instance($courseid);
 
 
 
-
 function show_achievments() {
+  global $USER, $CFG;
 
   $courseid = required_param('id', PARAM_INT);
+  $userid = $USER->id;
   $activities = get_course_activities($courseid);
   $students = get_course_students($courseid);
 
@@ -84,59 +85,9 @@ $achievments_html = '
 					</p>
 				</div>
 			</div>
-		</div>
-		<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-			<div class="offer offer-success">
-				<div class="shape" style="">
-					<div class="shape-text">
-						Quests
-					</div>
-				</div>
-				<div class="offer-content">
-					<h3 class="lead">
-						Desbravador do Moodle
-					</h3>
-					<p>
-						Você completou todas as atividades desse curso! Mas continue assim para manter sua conquista!
-					</p>
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-			<div class="offer offer-warning">
-				<div class="shape" style="">
-					<div class="shape-text">
-						Quests
-					</div>
-				</div>
-				<div class="offer-content">
-					<h3 class="lead">
-						Você está quase lá...
-					</h3>
-					<p>
-						Você deixou passar algumas atividades, mas não desanime, ainda tem um longo caminho pela frente!
-					</p>
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-			<div class="offer offer-radius offer-danger">
-				<div class="shape" style="">
-					<div class="shape-text">
-						Quests
-					</div>
-				</div>
-				<div class="offer-content">
-					<h3 class="lead">
-						Tome cuidado...
-					</h3>
-					<p>
-						Você ainda não respondeu nenhuma atividade deste curso, se deseja ter um resultado positivo no final, isto deve mudar.
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
+		</div>'
+    .get_activity_achievment().
+	'</div>
 </div>';
   return $achievments_html;
 }
@@ -214,6 +165,76 @@ function get_pet_life(){
         			</div>
         		</div>';
       }
+
+}
+
+function get_activity_achievment() {
+  global $USER, $CFG;
+
+  $courseid = required_param('id', PARAM_INT);
+  $userid = $USER->id;
+
+  $qntdActivities = round(key(get_qntd_ativities_course($courseid)));
+  $qntActivitiesStudent = round(key(get_qntd_ativities_student($courseid, $userid)));
+
+  if (($qntActivitiesStudent/$qntdActivities) == 1) {
+      return
+          '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+      			<div class="offer offer-success">
+      				<div class="shape" style="">
+      					<div class="shape-text">
+      						Quests
+      					</div>
+      				</div>
+      				<div class="offer-content">
+      					<h3 class="lead">
+      						Desbravador do Moodle
+      					</h3>
+      					<p>
+      						Você completou todas as atividades desse curso! Mas continue assim para manter sua conquista!
+      					</p>
+      				</div>
+      			</div>
+      		</div>';
+  } elseif (($qntActivitiesStudent/$qntdActivities) > 0) {
+    return
+        '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+    			<div class="offer offer-warning">
+    				<div class="shape" style="">
+    					<div class="shape-text">
+    						Quests
+    					</div>
+    				</div>
+    				<div class="offer-content">
+    					<h3 class="lead">
+    						Você está quase lá...
+    					</h3>
+    					<p>
+    						Você deixou passar algumas atividades, mas não desanime, ainda tem um longo caminho pela frente!
+    					</p>
+    				</div>
+    			</div>
+    		</div>';
+  } else {
+    return
+        '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+    			<div class="offer offer-radius offer-danger">
+    				<div class="shape" style="">
+    					<div class="shape-text">
+    						Quests
+    					</div>
+    				</div>
+    				<div class="offer-content">
+    					<h3 class="lead">
+    						Tome cuidado...
+    					</h3>
+    					<p>
+    						Você ainda não respondeu nenhuma atividade deste curso, se deseja ter um resultado positivo no final, isto deve mudar.
+    					</p>
+    				</div>
+    			</div>
+    		</div>';
+  }
 
 }
 
