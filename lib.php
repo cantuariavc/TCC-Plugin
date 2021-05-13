@@ -275,7 +275,7 @@ function set_daily_login($courseid, $userid) {
     if (!empty($courseid) && !empty($userid)) {
         $sql = "INSERT INTO {block_game_daily_login}(loginday, courseid, userid) VALUES (?, ?, ?)";
         $DB->execute($sql, array(date('Y-m-d'), $courseid, $userid));
-  
+
         return true;
     } else {
         return false;
@@ -308,7 +308,7 @@ function get_course_registration_day($couseid, $userid) {
                 on e.id = ue.enrolid
                 WHERE e.courseid=? AND ue.userid=?";
         $first_day = $DB->get_records_sql($sql, array($couseid, $userid));
-        
+
         return $first_day;
     } else {
         return false;
@@ -322,12 +322,12 @@ function get_number_days_logged($first_day, $courseid, $userid) {
                 FROM {block_game_daily_login}
                 WHERE loginday >= ? AND courseid=? AND userid=?";
         $days_logged = $DB->get_records_sql($sql, array($first_day, $courseid, $userid));
-        
+
         return $days_logged;
     } else {
         return false;
     }
-    
+
 }
 
 function get_students_lastaccess($courseid) {
@@ -358,6 +358,19 @@ function update_points($courseid, $userid, $points) {
     if (!empty($courseid) && !empty($userid) && $points >= 0) {
         $sql = "UPDATE {block_game}
                 SET score_bonus_day=?
+                WHERE courseid=? AND userid=?";
+        $DB->execute($sql, array($points, $courseid, $userid));
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function update_activities_points($courseid, $userid, $points) {
+    global $DB, $CFG;
+    if (!empty($courseid) && !empty($userid) && $points >= 0) {
+        $sql = "UPDATE {block_game}
+                SET score_activities= score_activities + ?
                 WHERE courseid=? AND userid=?";
         $DB->execute($sql, array($points, $courseid, $userid));
         return true;
@@ -1056,4 +1069,149 @@ function is_student_user($userid, $courseid) {
         return $busca->total;
     }
     return 0;
+}
+
+
+/**
+ * Return list of activities from course.
+ *
+ * @param int $courseid
+ * @return mixed
+ */
+function get_course_activities($courseid) {
+    global $DB, $CFG;
+
+    if (!empty($courseid)) {
+      $sql = 'SELECT q.name, q.id'
+              . ' FROM {course} c'
+              . ' INNER JOIN {quiz} q ON q.course = c.id'
+              . ' WHERE c.id = ?'
+              . 'ORDER BY name';
+
+      $activities = $DB->get_records_sql($sql, array($courseid));
+      return $activities;
+    }
+    return false;
+}
+
+/**
+ * Return list of participants from course.
+ *
+ * @param int $courseid
+ * @return mixed
+ */
+function get_course_students($courseid) {
+    global $DB, $CFG;
+
+    if (!empty($courseid)) {
+      $sql = "SELECT u.id, u.username, CONCAT(u.firstname, ' ', u.lastname) as nome
+               FROM {course} c
+               INNER JOIN {enrol} e ON c.id = e.courseid
+               INNER JOIN {user_enrolments} ue ON e.id = ue.enrolid
+               INNER JOIN {user} u ON u.id = ue.userid
+               WHERE c.id = ?";
+
+      $matriculados = $DB->get_records_sql($sql, array($courseid));
+      return $matriculados;
+    }
+    return false;
+}
+
+/**
+ * Return list of activities from course.
+ *
+ * @param int $courseid $quizid
+ * @return mixed
+ */
+function get_activitie_students($courseid, $quizid) {
+    global $DB, $CFG;
+
+    if (!empty($courseid)) {
+      $sql = "SELECT u.id, u.username, CONCAT(u.firstname, ' ', u.lastname) as nome
+                FROM {course} c
+                INNER JOIN {quiz} q ON q.course = c.id
+                INNER JOIN {quiz_attempts} qa ON qa.quiz = q.id
+                INNER JOIN {user} u ON qa.userid = u.id
+                WHERE c.id = ? and q.id = ?
+                GROUP BY u.id, username, nome";
+
+      $responderam = $DB->get_records_sql($sql, array($courseid, $quizid));
+      return $responderam;
+    }
+    return false;
+}
+
+/**
+ * Return list of students that did not respond a quiz from course.
+ *
+ * @param int $courseid $quizid
+ * @return mixed
+ */
+function get_not_activitie_students($courseid, $quizid) {
+    global $DB, $CFG;
+
+    if (!empty($courseid)) {
+      $sql = "SELECT u.id, username,CONCAT(u.firstname, ' ', u.lastname) as Nome FROM mdl_course c
+              INNER JOIN mdl_enrol e ON c.id = e.courseid
+              INNER JOIN mdl_user_enrolments ue ON e.id = ue.enrolid
+              INNER JOIN mdl_user u ON u.id = ue.userid
+              WHERE c.id = ? and u.id NOT IN
+              (
+              SELECT u.id FROM mdl_course c
+              INNER JOIN mdl_quiz q on q.course = c.id
+              INNER JOIN mdl_quiz_attempts qa on qa.quiz = q.id
+              INNER JOIN mdl_user u on qa.userid = u.id
+              WHERE c.id = ? and q.id = ?
+              GROUP BY u.id
+              );";
+
+      $naoresponderam = $DB->get_records_sql($sql, array($courseid, $courseid, $quizid));
+      return $naoresponderam;
+    }
+    return false;
+}
+
+/**
+ * Return number of students that respond a quiz from course.
+ *
+ * @param int $courseid $quizid
+ * @return mixed
+ */
+function get_qntd_respond_course($courseid, $quizid) {
+    global $DB, $CFG;
+
+    if (!empty($courseid)) {
+      $sql = "SELECT COUNT(DISTINCT u.id) FROM mdl_course c
+              INNER JOIN mdl_quiz q on q.course = c.id
+              INNER JOIN mdl_quiz_attempts qa on qa.quiz = q.id
+              INNER JOIN mdl_user u on qa.userid = u.id
+              WHERE c.id = ? and q.id = ?";
+
+      $qntdResponderam = $DB->get_records_sql($sql, array($courseid, $quizid));
+      return $qntdResponderam;
+    }
+    return false;
+}
+
+/**
+ * Return number of students from course.
+ *
+ * @param int $courseid
+ * @return mixed
+ */
+function get_qntd_enrols_course($courseid) {
+    global $DB, $CFG;
+
+    if (!empty($courseid)) {
+      $sql = "SELECT c.id, COUNT(u.id) as qntdMatriculados FROM mdl_course c
+              INNER JOIN mdl_enrol e ON c.id = e.courseid
+              INNER JOIN mdl_user_enrolments ue ON e.id = ue.enrolid
+              INNER JOIN mdl_user u ON u.id = ue.userid
+              WHERE c.id = ?
+              GROUP BY c.id";
+
+      $qntdMatriculados = $DB->get_records_sql($sql, array($courseid));
+      return $qntdMatriculados;
+    }
+    return false;
 }

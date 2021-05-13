@@ -71,6 +71,10 @@ class block_game_edit_form extends block_edit_form {
             $bonusdayoptions = array(0 => 0, 5 => 5, 10 => 10, 15 => 15, 20 => 20, 50 => 50, 100 => 100);
             $mform->addElement('select', 'config_bonus_day', get_string('config_bonus_day', 'block_game'), $bonusdayoptions);
             $mform->addHelpButton('config_bonus_day', 'config_bonus_day', 'block_game');
+            // Control bonus of Aura Effect.
+            $auraefectoptions = array(0 => 0, 5 => 5, 10 => 10, 15 => 15, 20 => 20, 50 => 50, 100 => 100);
+            $mform->addElement('select', 'config_aura_efect', 'Efeito Aura', $auraefectoptions);
+            $mform->addHelpButton('config_aura_efect', 'config_aura_efect', 'block_game');
             // Control visibility of rank group.
             $mform->addElement('selectyesno', 'config_show_rank_group', get_string('config_rank_group', 'block_game'));
             $mform->setDefault('config_show_rank_group', 0);
