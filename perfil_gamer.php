@@ -167,9 +167,6 @@ if ($couseid > 1) {
             <li class="nav-item">
                 <a class="nav-link" id="'.$calendario.'-tab" data-toggle="tab" href="#'.$calendario.'" role="tab" aria-controls="'.$calendario.'" aria-selected="false">'.ucfirst(substr_replace($calendario, 'ário', 6)).'</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" id="'.$loja.'-tab" data-toggle="tab" href="#'.$loja.'" role="tab" aria-controls="'.$loja.'" aria-selected="false">'.ucfirst($loja).'</a>
-            </li>
         </ul>
 
         <div class="tab-content" id="myTabContent">
@@ -206,7 +203,6 @@ if ($couseid > 1) {
                 get_calendar().'
             </div>
 
-            <div class="tab-pane fade" id="'.$loja.'" role="tabpanel" aria-labelledby="'.$loja.'-tab"><br/>&emsp;Loja</div>
         </div>';
 } elseif ($couseid == 1) {
     $outputhtml .= '<div class="boxgame">';
