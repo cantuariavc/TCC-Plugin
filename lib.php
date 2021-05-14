@@ -269,12 +269,36 @@ function reset_points_game($courseid) {
     return false;
 }
 
+function get_login_sequence($userid) {
+    global $DB, $CFG;
+    if (!empty($userid)) {
+        $sql = "SELECT login_sequence FROM {block_game} WHERE userid=?";
+        $loginSequence = $DB->get_records_sql($sql, array($userid));
+
+        return $loginSequence;
+    } else {
+        return false;
+    }
+}
 
 function set_daily_login($courseid, $userid) {
     global $DB, $CFG;
     if (!empty($courseid) && !empty($userid)) {
         $sql = "INSERT INTO {block_game_daily_login}(loginday, courseid, userid) VALUES (?, ?, ?)";
         $DB->execute($sql, array(date('Y-m-d'), $courseid, $userid));
+
+        $sql = "SELECT bonus_day FROM {block_game} WHERE userid=?";
+        $lastBonusDay = $DB->get_records_sql($sql, array($userid));
+
+        if (explode(" ", key($lastBonusDay))[0] == date("Y-m-d", strtotime("yesterday"))) {
+            $loginSequence = key(get_login_sequence($userid)) + 1;
+        
+            $sql = "UPDATE {block_game} SET login_sequence=? WHERE userid=?";
+            $DB->execute($sql, array($loginSequence, $userid));
+        } else {
+            $sql = "UPDATE {block_game} SET login_sequence=1 WHERE userid=?";
+            $DB->execute($sql, array($userid));
+        }
 
         return true;
     } else {
@@ -424,7 +448,8 @@ function bonus_of_day($game, $bonus) {
                 . '  FROM {block_game} WHERE courseid=? AND userid=?';
         $busca = $DB->get_record_sql($sql, array($game->courseid, $game->userid));
         if ($busca->bonus_day == null || $busca->bonus_day < $busca->hoje) {
-            $game->score_bonus_day = ((int) $game->score_bonus_day + (int) $bonus);
+            $loginSequence = key(get_login_sequence($game->userid)) * 0.1;
+            $game->score_bonus_day = (int) $game->score_bonus_day + ((int) $bonus * (1 + $loginSequence));
             $DB->execute("UPDATE {block_game} SET score_bonus_day=?, bonus_day=?  WHERE id=?",
                     array((int) $game->score_bonus_day, $busca->hoje, $game->id));
         }
