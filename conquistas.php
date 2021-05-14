@@ -35,58 +35,8 @@ $achievments_html = '
 <div class="container">
 	<div class="row">'
     .get_pet_life().
-		'<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-			<div class="offer offer-success">
-				<div class="shape" style="">
-					<div class="shape-text">
-						Daily
-					</div>
-				</div>
-				<div class="offer-content">
-					<h3 class="lead">
-						Rei da presença
-					</h3>
-					<p>
-						Você mora aqui ? Porque sua presença é perfeita! Já fazem mais de 30 dias que você não falta!
-					</p>
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-			<div class="offer offer-warning">
-				<div class="shape" style="">
-					<div class="shape-text">
-						Daily
-					</div>
-				</div>
-				<div class="offer-content">
-					<h3 class="lead">
-						Turista
-					</h3>
-					<p>
-						Sua presença é sempre muito importante nesse curso, seria ótimo ter você mais dias conosco
-					</p>
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
-			<div class="offer offer-radius offer-danger">
-				<div class="shape" style="">
-					<div class="shape-text">
-						Daily
-					</div>
-				</div>
-				<div class="offer-content">
-					<h3 class="lead">
-						Você é dessa turma ?
-					</h3>
-					<p>
-						Se sim, seria bom que você aparecesse mais, sua ausência pode acabar  te prejudicando.
-					</p>
-				</div>
-			</div>
-		</div>'
-    .get_activity_achievment().
+    get_frequency_sequence().
+    get_activity_achievment().
 	'</div>
 </div>';
   return $achievments_html;
@@ -230,6 +180,74 @@ function get_activity_achievment() {
     					</h3>
     					<p>
     						Você ainda não respondeu nenhuma atividade deste curso, se deseja ter um resultado positivo no final, isto deve mudar.
+    					</p>
+    				</div>
+    			</div>
+    		</div>';
+  }
+
+}
+
+function get_frequency_sequence() {
+  global $USER, $CFG;
+
+  $courseid = required_param('id', PARAM_INT);
+  $userid = $USER->id;
+  $sequence = key(get_login_sequence($userid));
+
+  if ( $sequence >= 30) {
+      return
+          '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+      			<div class="offer offer-success">
+      				<div class="shape" style="">
+      					<div class="shape-text">
+      						Daily
+      					</div>
+      				</div>
+      				<div class="offer-content">
+      					<h3 class="lead">
+      						Rei da presença
+      					</h3>
+      					<p>
+      						Você mora aqui ? Porque sua presença é perfeita! Já fazem mais de 30 dias que você não falta!
+      					</p>
+      				</div>
+      			</div>
+      		</div>';
+  } elseif ($sequence >= 7) {
+    return
+        '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+    			<div class="offer offer-warning">
+    				<div class="shape" style="">
+    					<div class="shape-text">
+    						Daily
+    					</div>
+    				</div>
+    				<div class="offer-content">
+    					<h3 class="lead">
+    						Turista
+    					</h3>
+    					<p>
+    						Sua presença é sempre muito importante nesse curso, seria ótimo ter você mais dias conosco
+    					</p>
+    				</div>
+    			</div>
+    		</div>';
+  } else {
+    return
+        '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+    			<div class="offer offer-radius offer-danger">
+    				<div class="shape" style="">
+    					<div class="shape-text">
+    						Daily
+    					</div>
+    				</div>
+    				<div class="offer-content">
+    					<h3 class="lead">
+    						Você é dessa turma ?
+    					</h3>
+    					<p>
+    						Se sim, seria bom que você aparecesse mais, sua ausência pode acabar te prejudicando.
     					</p>
     				</div>
     			</div>
