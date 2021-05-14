@@ -29,6 +29,7 @@ require_once($CFG->libdir . '/completionlib.php');
 require_once('calendar.php');
 require_once('pet.php');
 require_once('aura.php');
+require_once('conquistas.php');
 
 require_login();
 
@@ -166,9 +167,6 @@ if ($couseid > 1) {
             <li class="nav-item">
                 <a class="nav-link" id="'.$calendario.'-tab" data-toggle="tab" href="#'.$calendario.'" role="tab" aria-controls="'.$calendario.'" aria-selected="false">'.ucfirst(substr_replace($calendario, 'ário', 6)).'</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" id="'.$loja.'-tab" data-toggle="tab" href="#'.$loja.'" role="tab" aria-controls="'.$loja.'" aria-selected="false">'.ucfirst($loja).'</a>
-            </li>
         </ul>
 
         <div class="tab-content" id="myTabContent">
@@ -183,7 +181,7 @@ if ($couseid > 1) {
 
             <div class="tab-pane fade" id="'.$emblemas.'" role="tabpanel" aria-labelledby="'.$emblemas.'-tab">' . '
                 <br/>'.
-                get_badges($game, $DB, $CFG).'
+                show_achievments().'
             </div>
 
             <div class="tab-pane fade" id="'.$ranking.'" role="tabpanel" aria-labelledby="'.$ranking.'-tab">' . '
@@ -200,12 +198,11 @@ if ($couseid > 1) {
               show_activities() .'
             </div>
 
-            <div class="tab-pane fade" id="'.$calendario.'" role="tabpanel" aria-labelledby="'.$calendario.'-tab"> 
+            <div class="tab-pane fade" id="'.$calendario.'" role="tabpanel" aria-labelledby="'.$calendario.'-tab">
                 <br/>'.
                 get_calendar().'
             </div>
 
-            <div class="tab-pane fade" id="'.$loja.'" role="tabpanel" aria-labelledby="'.$loja.'-tab"><br/>&emsp;Loja</div>
         </div>';
 } elseif ($couseid == 1) {
     $outputhtml .= '<div class="boxgame">';

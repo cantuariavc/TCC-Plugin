@@ -1240,3 +1240,45 @@ function get_qntd_enrols_course($courseid) {
     }
     return false;
 }
+
+/**
+ * Return number of activities from course.
+ *
+ * @param int $courseid
+ * @return mixed
+ */
+function get_qntd_ativities_course($courseid) {
+    global $DB, $CFG;
+
+    if (!empty($courseid)) {
+      $sql = "SELECT COUNT(q.id) as qntd_ativities_course FROM mdl_course c
+              INNER JOIN mdl_quiz q ON q.course = c.id
+              WHERE c.id = ?
+              GROUP BY c.id";
+
+      $qntActivities = $DB->get_records_sql($sql, array($courseid));
+      return $qntActivities;
+    }
+    return false;
+}
+
+/**
+ * Return number of activities from course.
+ *
+ * @param int $courseid
+ * @return mixed
+ */
+function get_qntd_ativities_student($courseid, $userid) {
+    global $DB, $CFG;
+
+    if (!empty($courseid)) {
+      $sql = "SELECT count(qa.id) as qnt_activities FROM mdl_course c
+              INNER JOIN mdl_quiz q ON q.course = c.id
+              INNER JOIN mdl_quiz_attempts qa ON qa.quiz = q.id
+             WHERE c.id = ? and qa.userid = ? and qa.attempt = 1";
+
+      $qntActivitiesStudent = $DB->get_records_sql($sql, array($courseid, $userid));
+      return $qntActivitiesStudent;
+    }
+    return false;
+}
