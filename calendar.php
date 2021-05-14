@@ -6,7 +6,13 @@ function get_calendar() {
 }
 
 function mostrar_calendario_completo() {
-    $calendario_table = '<table align="center"><th>'.date('Y').'</th>';
+    global $USER;
+    $userid = $USER->id;
+
+    $calendario_table = '
+        <table align="center">
+        <th>'.date('Y').'</br>
+        Sequência de dias logados: '.key(get_login_sequence($userid)).'</th>';
     $cont = 1;
     for ($j = 0; $j < 3; $j++) {
         $calendario_table .= '<tr>';
