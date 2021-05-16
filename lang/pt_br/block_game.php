@@ -117,6 +117,18 @@ $string['config_bonus_badge'] = 'Bônus por emblema';
 $string['config_bonus_badge_help'] = '<p>Valor de bônus por emblema de curso concluído.</p>';
 $string['config_title'] = 'Alterar título';
 $string['config_title_help'] = '<p>Alterar o título do bloco.</p>';
+$string['config_show_scarlatt_letter'] = 'Letra Escarlate';
+$string['config_show_scarlatt_letter_help'] = '<p>Apresentar o nome de todos os alunos que não realizaram a atividade.</p>';
+$string['config_show_bonus_roulette'] = 'Roleta de Bônus';
+$string['config_show_bonus_roulette_help'] = '<p>Caso ativado, um aluno que esteja online recebe um bônus em sua pontuação.</p>';
+$string['config_show_russian_roulette'] = 'Roleta Russa';
+$string['config_show_russian_roulette_help'] = '<p>Caso seja ativado, um aluno aleatório que não esteja online irá perder uma quantidade de pontos.</p>';
+$string['config_show_pet'] = 'Bichinho Virtual';
+$string['config_show_pet_help'] = '<p>Adiciona um bichinho virtual na qual a barra de vida muda conforme a frequência do usuário.</p>';
+$string['config_show_calendar'] = 'Calendário de Frequência';
+$string['config_show_calendar_help'] = '<p>Apresenta um calendário com od dias que o usuário recebeu o bônus do dia. E caso o aluno tenha uma sequência de frequência de 7 ou mais dias, sua pontuação recebe um bônus.</p>';
+
+
 
 $string['roulette_btn'] = 'Roleta';
 $string['roulette_title'] = 'Roleta';
