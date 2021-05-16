@@ -23,6 +23,9 @@ $PAGE->set_context(context_course::instance($courseid));
 $PAGE->set_title(get_string('roulette_title', 'block_game'));
 $PAGE->set_heading(get_string('roulette_title', 'block_game'));
 
+$showRussianRoulette = $game->config->show_russian_roulette;
+$showBonusRoulette = $game->config->show_bonus_roulette;
+
 echo $OUTPUT->header();
 $outputhtml = '<div class="boxs">';
 
@@ -48,13 +51,20 @@ if ($courseid > 1) {
 
         $outputhtml .= '
             <div class="container">
-                <div class="row justify-content-md-center">
-                    <div class="col col-lg-4">
-                        <a type="button" class="btn btn-success" href="'.$CFG->wwwroot.'/blocks/game/add_points.php?id='.$COURSE->id.'&studentId='.$studentIdOnline.'">Adicionar Pontos Aleatoriamente</a>
-                    </div>
-                    <div class="col col-lg-4">
-                        <a type="button" class="btn btn-danger" href="'.$CFG->wwwroot.'/blocks/game/remove_points.php?id='.$COURSE->id.'&studentId='.$studentIdOffline.'">Remover Pontos Aleatoriamente</a>
-                    </div>
+                <div class="row justify-content-md-center">';
+        if ($showBonusRoulette == 1) {
+          $outputhtml .= '
+          <div class="col col-lg-4">
+          <a type="button" class="btn btn-success" href="'.$CFG->wwwroot.'/blocks/game/add_points.php?id='.$COURSE->id.'&studentId='.$studentIdOnline.'">Adicionar Pontos Aleatoriamente</a>
+          </div>';
+        }
+        if ($showRussianRoulette == 1) {
+          $outputhtml .= '
+          <div class="col col-lg-4">
+              <a type="button" class="btn btn-danger" href="'.$CFG->wwwroot.'/blocks/game/remove_points.php?id='.$COURSE->id.'&studentId='.$studentIdOffline.'">Remover Pontos Aleatoriamente</a>
+          </div>';
+        }
+        $outputhtml .= '
                 </div>
                 </br>
                 <div class="row">
@@ -67,7 +77,7 @@ if ($courseid > 1) {
                                 </tr>
                             </thead>
                             <tbody>';
-        
+
         foreach ($students as $student) {
             if (!has_capability('moodle/course:update', $context, $student->id)) {
                 if ($student->lastaccess >= time() - 900) {
@@ -77,7 +87,7 @@ if ($courseid > 1) {
                     $status = "off-line";
                     $color = "red";
                 }
-                
+
                 $outputhtml .= '
                     <tr>
                         <td>'.$student->nome.'</td>
