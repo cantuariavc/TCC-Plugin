@@ -128,6 +128,26 @@ if (!isset($game->config->show_info) && $courseid > 1) {
             $outputhtml .= ' ' . get_string('help_bonus_badge_text_value', 'block_game');
             $outputhtml .= '<strong>' . $cfggame->bonus_badge . 'pts</strong><br/></p>';
         }
+        if ($game->config->aura_efect > 0) {
+          $outputhtml .= '<p align="justify">' . get_string('help_aura_efect_text', 'block_game');
+          $outputhtml .= ' ' . get_string('help_aura_efect_text_value', 'block_game');
+          $outputhtml .= '<strong>' . $game->config->aura_efect . 'pts</strong><br/></p>';
+        }
+        if ($game->config->show_scarlatt_letter == 1) {
+          $outputhtml .= '<p align="justify">' . get_string('help_scarlat_letter_text', 'block_game');
+        }
+        if ($game->config->show_bonus_roulette == 1) {
+          $outputhtml .= '<p align="justify">' . get_string('help_bonus_roulete_text', 'block_game');
+        }
+        if ($game->config->show_russian_roulette == 1) {
+          $outputhtml .= '<p align="justify">' . get_string('help_russian_roulete_text', 'block_game');
+        }
+        if ($game->config->show_pet == 1) {
+          $outputhtml .= '<p align="justify">' . get_string('help_pet_text', 'block_game');
+        }
+        if ($game->config->show_calendar == 1) {
+          $outputhtml .= '<p align="justify">' . get_string('help_calendar_text', 'block_game');
+        }
         $outputhtml .= '<hr/></td></tr>';
     }
 
