@@ -30,6 +30,7 @@ require_once('calendar.php');
 require_once('pet.php');
 require_once('aura.php');
 require_once('conquistas.php');
+require_once('rank.php');
 
 require_login();
 
@@ -186,7 +187,7 @@ if ($couseid > 1) {
 
             <div class="tab-pane fade" id="'.$ranking.'" role="tabpanel" aria-labelledby="'.$ranking.'-tab">' . '
                 <br/>'.
-                get_rank_row($showrank, $CFG, $game) .'
+                get_rank() .'
             </div>
 
             <div class="tab-pane fade" id="'.$bichinho_virtual.'" role="tabpanel" aria-labelledby="'.$bichinho_virtual.'-tab">
