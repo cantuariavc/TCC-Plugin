@@ -75,6 +75,37 @@ class block_game_edit_form extends block_edit_form {
             $auraefectoptions = array(0 => 0, 5 => 5, 10 => 10, 15 => 15, 20 => 20, 50 => 50, 100 => 100);
             $mform->addElement('select', 'config_aura_efect', 'Efeito Aura', $auraefectoptions);
             $mform->addHelpButton('config_aura_efect', 'config_aura_efect', 'block_game');
+
+
+
+            // Control visibility of Scarlat Letter
+            $mform->addElement('selectyesno', 'config_show_scarlatt_letter', 'Habilitar Letra Escarlate');
+            $mform->setDefault('config_show_scarlatt_letter', 1);
+            $mform->addHelpButton('config_show_scarlatt_letter', 'config_show_scarlatt_letter', 'block_game');
+            $mform->disabledIf('config_show_scarlatt_letter', 'config_aura_efect', 'eq', 0);
+
+            // Control visibility of Bonus Roulette
+            $mform->addElement('selectyesno', 'config_show_bonus_roulette', 'Habilitar Roleta de Bonus');
+            $mform->setDefault('config_show_bonus_roulette', 1);
+            $mform->addHelpButton('config_show_bonus_roulette', 'config_show_bonus_roulette', 'block_game');
+
+            // Control visibility of Russian Roulette
+            $mform->addElement('selectyesno', 'config_show_russian_roulette', 'Habilitar Roleta de punições');
+            $mform->setDefault('config_show_russian_roulette', 1);
+            $mform->addHelpButton('config_show_russian_roulette', 'config_show_russian_roulette', 'block_game');
+
+
+            // Control visibility of Pet
+            $mform->addElement('selectyesno', 'config_show_pet', 'Utilizar Bichinho Virtual');
+            $mform->setDefault('config_show_pet', 1);
+            $mform->addHelpButton('config_show_pet', 'config_show_pet', 'block_game');
+
+            // Control visibility of Calendar
+            $mform->addElement('selectyesno', 'config_show_calendar', 'Mostrar Calendário de Frequência');
+            $mform->setDefault('config_show_calendar', 1);
+            $mform->addHelpButton('config_show_calendar', 'config_show_calendar', 'block_game');
+
+
             // Control visibility of rank group.
             $mform->addElement('selectyesno', 'config_show_rank_group', get_string('config_rank_group', 'block_game'));
             $mform->setDefault('config_show_rank_group', 0);

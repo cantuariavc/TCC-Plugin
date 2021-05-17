@@ -25,12 +25,16 @@ $context = context_course::instance($courseid);
 
 
 function show_activities() {
+  global $USER, $SESSION, $COURSE, $OUTPUT, $CFG;
 
   $courseid = required_param('id', PARAM_INT);
   $activities = get_course_activities($courseid);
   $students = get_course_students($courseid);
   $studentsCompleted = array();
   $studentsNotCompleted = array();
+  $game = new stdClass();
+  $game = $SESSION->game;
+  $showLetter = $game->config->show_scarlatt_letter;
 
 $activities_html = '
 <section id="tabs" class="project-tab">
@@ -99,13 +103,15 @@ $activities_html = '
                                     }
 
                                     $studentsNotCompleted[] = get_not_activitie_students($courseid, $quizId);
-                                    foreach ($studentsNotCompleted[0] as $notCompleted) {
-                                      $notCompletedId = $notCompleted->id;
-                                      $notCompletedName = $notCompleted->nome;
-                                      $activities_html .= '<tr>
-                                      <td>'.$notCompletedName.'</td>
-                                      <td style="color: red;"><i class="fa fa-times"></i></td>
-                                      </tr>';
+                                    if ($showLetter == 1) {
+                                      foreach ($studentsNotCompleted[0] as $notCompleted) {
+                                        $notCompletedId = $notCompleted->id;
+                                        $notCompletedName = $notCompleted->nome;
+                                        $activities_html .= '<tr>
+                                        <td>'.$notCompletedName.'</td>
+                                        <td style="color: red;"><i class="fa fa-times"></i></td>
+                                        </tr>';
+                                      }
                                     }
 
                                     $activities_html .=  '

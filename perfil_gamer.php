@@ -47,6 +47,8 @@ $showavatar = !isset($game->config->use_avatar) || $game->config->use_avatar == 
 $showrank = !isset($game->config->show_rank) || $game->config->show_rank == 1;
 $showscore = !isset($game->config->show_score) || $game->config->show_score == 1;
 $showlevel = !isset($game->config->show_level) || $game->config->show_level == 1;
+$showPet = $game->config->show_pet;
+$showCalendar = $game->config->show_calendar;
 require_login($course);
 
 $PAGE->set_pagelayout('course');
@@ -158,16 +160,25 @@ if ($couseid > 1) {
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="'.$ranking.'-tab" data-toggle="tab" href="#'.$ranking.'" role="tab" aria-controls="'.$ranking.'" aria-selected="false">'.ucfirst($ranking).'</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="'.$bichinho_virtual.'-tab" data-toggle="tab" href="#'.$bichinho_virtual.'" role="tab" aria-controls="'.$bichinho_virtual.'" aria-selected="false">'.ucwords(str_replace('-', ' ', $bichinho_virtual)).'</a>
-            </li>
+            </li>';
+    if ($showPet == 1) {
+      $outputhtml .= '
+      <li class="nav-item">
+          <a class="nav-link" id="'.$bichinho_virtual.'-tab" data-toggle="tab" href="#'.$bichinho_virtual.'" role="tab" aria-controls="'.$bichinho_virtual.'" aria-selected="false">'.ucwords(str_replace('-', ' ', $bichinho_virtual)).'</a>
+      </li>';
+    }
+    $outputhtml .= '
             <li class="nav-item">
                 <a class="nav-link" id="'.$quests.'-tab" data-toggle="tab" href="#'.$quests.'" role="tab" aria-controls="'.$quests.'" aria-selected="false">'.ucfirst($quests).'</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="'.$calendario.'-tab" data-toggle="tab" href="#'.$calendario.'" role="tab" aria-controls="'.$calendario.'" aria-selected="false">'.ucfirst(substr_replace($calendario, 'ário', 6)).'</a>
-            </li>
+            </li>';
+
+    if ($showCalendar == 1) {
+      $outputhtml .= '
+      <li class="nav-item">
+      <a class="nav-link" id="'.$calendario.'-tab" data-toggle="tab" href="#'.$calendario.'" role="tab" aria-controls="'.$calendario.'" aria-selected="false">'.ucfirst(substr_replace($calendario, 'ário', 6)).'</a>
+      </li>';
+    }
+            $outputhtml .= '
         </ul>
 
         <div class="tab-content" id="myTabContent">
